@@ -24,21 +24,6 @@
     p.bounds;
     p.hit;
 
-    var img = new Image();
-    img.src = "assets/testSeq.png";
-    
-
-    var spriteSheet = new createjs.SpriteSheet({
-        images: [img],
-        frames: { width: 64, height: 68, regX: 32, regY: 34 },
-        animations: {
-            walkUpRt: [0, 19, "walkRt"],
-            walkDnRt: [20, 39, "walkUpRt"],
-            walkRt: [41, 59, "walkDnRt"]
-        }
-    });
-
-    createjs.SpriteSheetUtils.addFlippedFrames(spriteSheet, true, false, false);
     // constructor:
     p.Container_initialize = p.initialize; //unique to avoid overiding base class
 
