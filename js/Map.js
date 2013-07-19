@@ -34,7 +34,7 @@
         
         var g = this.body.graphics;
 
-        // Create horizontal lines
+        // Create vertical lines
         for (i = 0; i < 60; i++) {
             
             var y = i * 40;    
