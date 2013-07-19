@@ -23,6 +23,8 @@
 
     p.bounds;
     p.hit;
+    
+    p.isFlying = false;
 
     // constructor:
     p.Container_initialize = p.initialize; //unique to avoid overiding base class
