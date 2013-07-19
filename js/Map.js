@@ -21,6 +21,8 @@
     
     p.MAX_VELOCITY = 15;
     
+    p.SWAP_VELOCITY = 10;
+    
     p.NORMAL_VELOCITY = 5;
     
     p.MINIMUN_VELOCITY = 2;

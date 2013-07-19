@@ -135,7 +135,7 @@ function checkBirdMovements() {
             if (map.velocityY < 0) {
                 if ((map.velocityY * -1) > map.MINIMUN_VELOCITY) {
                     map.velocityY++;
-                } else if (map.velocityX >= map.NORMAL_VELOCITY || (map.velocityX * -1) >= map.NORMAL_VELOCITY) {
+                } else if (map.velocityX >= map.SWAP_VELOCITY || (map.velocityX * -1) >= map.SWAP_VELOCITY) {
                     map.velocityY++;
                 }
             } else if (map.velocityY < map.MAX_VELOCITY) {
@@ -151,7 +151,7 @@ function checkBirdMovements() {
             if (map.velocityY > 0) {
                 if (map.velocityY > map.MINIMUN_VELOCITY) {
                     map.velocityY--;
-                } else if (map.velocityX >= map.NORMAL_VELOCITY || (map.velocityX * -1) >= map.NORMAL_VELOCITY) {
+                } else if (map.velocityX >= map.SWAP_VELOCITY || (map.velocityX * -1) >= map.SWAP_VELOCITY) {
                     map.velocityY--;
                 }
             } else if ((map.velocityY * -1) < map.MAX_VELOCITY) {
@@ -168,7 +168,7 @@ function checkBirdMovements() {
             if (map.velocityX < 0) {
                 if ((map.velocityX * -1) > map.MINIMUN_VELOCITY) {
                     map.velocityX++;
-                } else if (map.velocityY >= map.NORMAL_VELOCITY || (map.velocityY * -1) >= map.NORMAL_VELOCITY) {
+                } else if (map.velocityY >= map.SWAP_VELOCITY || (map.velocityY * -1) >= map.SWAP_VELOCITY) {
                     map.velocityX++;
                 }
             } else if (map.velocityX < map.MAX_VELOCITY) {
@@ -184,7 +184,7 @@ function checkBirdMovements() {
             if (map.velocityX > 0) {
                 if (map.velocityX > map.MINIMUN_VELOCITY) {
                     map.velocityX--;
-                } else if (map.velocityY >= map.NORMAL_VELOCITY || (map.velocityY * -1) >= map.NORMAL_VELOCITY) {
+                } else if (map.velocityY >= map.SWAP_VELOCITY || (map.velocityY * -1) >= map.SWAP_VELOCITY) {
                     map.velocityX--;
                 }
             } else if ((map.velocityX * -1) < map.MAX_VELOCITY) {
@@ -279,10 +279,11 @@ function handleKeyUp(e) {
 
         case KEYCODE_Q:
             if (bird.isFlying &&
-                    (map.velocityX === map.MINIMUN_VELOCITY
-                            || (map.velocityX * -1) <= map.MINIMUN_VELOCITY) &&
-                    (map.velocityX === map.MINIMUN_VELOCITY ||
-                            (map.velocityX * -1) <= map.MINIMUN_VELOCITY)) {
+                    ( (map.velocityX > 0 && map.velocityX <= map.MINIMUN_VELOCITY)
+                            || (map.velocityX <  0 && (map.velocityX * -1) <= map.MINIMUN_VELOCITY)) &&
+                    ((map.velocityY > 0 && map.velocityY <= map.MINIMUN_VELOCITY) ||
+                            (map.velocityY < 0 && (map.velocityY * -1) <= map.MINIMUN_VELOCITY))
+                ) {
                 bird.isFlying = false;
                 map.velocityX = 0;
                 map.velocityY = 0;
