@@ -132,7 +132,13 @@ function checkBirdMovements() {
 
     if (bird.isFlying) {
         if (movingUp) {
-            if (map.velocityY < map.MAX_VELOCITY) {
+             if(map.velocityY < 0){
+                if((map.velocityY * -1) > map.MINIMUN_VELOCITY){
+                    map.velocityY++;
+                } else if (map.velocityX > map.NORMAL_VELOCITY || (map.velocityX*-1) > map.NORMAL_VELOCITY){
+                    map.velocityY++;
+                }
+            } else if (map.velocityY < map.MAX_VELOCITY) {
                 map.velocityY++;
             }
         } else {
@@ -142,7 +148,13 @@ function checkBirdMovements() {
         }
 
         if (movingDown) {
-            if ((map.velocityY * -1) < map.MAX_VELOCITY) {
+            if(map.velocityY > 0){
+                if(map.velocityY > map.MINIMUN_VELOCITY){
+                    map.velocityY--;
+                } else if (map.velocityX > map.NORMAL_VELOCITY || (map.velocityX*-1) > map.NORMAL_VELOCITY){
+                    map.velocityY--;
+                }
+            } else if ((map.velocityY * -1) < map.MAX_VELOCITY) {
                 map.velocityY--;
             }
         } else {
@@ -153,7 +165,13 @@ function checkBirdMovements() {
 
 
         if (movingLeft) {
-            if (map.velocityX < map.MAX_VELOCITY) {
+            if(map.velocityX < 0){
+                if((map.velocityX * -1)> map.MINIMUN_VELOCITY){
+                    map.velocityX++;
+                } else if (map.velocityY > map.NORMAL_VELOCITY || (map.velocityY*-1) > map.NORMAL_VELOCITY){
+                    map.velocityX++;
+                }
+            } else if (map.velocityX < map.MAX_VELOCITY) {
                 map.velocityX++;
             }
         } else {
@@ -163,7 +181,13 @@ function checkBirdMovements() {
         }
 
         if (movingRight) {
-            if ((map.velocityX * -1) < map.MAX_VELOCITY) {
+            if(map.velocityX > 0){
+                if(map.velocityX > map.MINIMUN_VELOCITY){
+                    map.velocityX--;
+                } else if (map.velocityY > map.NORMAL_VELOCITY || (map.velocityY*-1) > map.NORMAL_VELOCITY){
+                    map.velocityX--;
+                }
+            } else if ((map.velocityX * -1) < map.MAX_VELOCITY) {
                 map.velocityX = map.velocityX - 1;
             }
         }

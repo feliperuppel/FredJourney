@@ -22,6 +22,8 @@
     p.MAX_VELOCITY = 30;
     
     p.NORMAL_VELOCITY = 10;
+    
+    p.MINIMUN_VELOCITY = 2;
 
     // public methods:
     p.initialize = function() {
