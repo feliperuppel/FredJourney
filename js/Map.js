@@ -15,6 +15,13 @@
     p.body;
     
     p.ContainerInitializer = p.initialize;
+    
+    p.velocityX = 0;
+    p.velocityY = 0;
+    
+    p.MAX_VELOCITY = 30;
+    
+    p.NORMAL_VELOCITY = 10;
 
     // public methods:
     p.initialize = function() {
@@ -23,16 +30,13 @@
         this.body = new createjs.Shape();
         this.addChild(this.body);
         
-        /**
-         * @type Graphics
-         */
         var g = this.body.graphics;
 
         // Create horizontal lines
         for (i = 0; i < 60; i++) {
             
             var y = i * 40;    
-            g.beginStroke("#000");
+            g.beginStroke("#999");
             g.moveTo(0, y); //nose
             g.lineTo(3200, y); //nose
             
@@ -43,7 +47,7 @@
         for (i = 0; i < 80; i++) {
             
             var x = i * 40;    
-            g.beginStroke("#000");
+            g.beginStroke("#999");
             g.moveTo(x, 0); //nose
             g.lineTo(x, 2400); //nose
             
