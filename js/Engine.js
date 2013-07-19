@@ -157,12 +157,8 @@
 				}
 				
 				if(movingRight){
-					
 					if((map.velocityX * -1) < map.MAX_VELOCITY){
-						console.log(map.velocityX );
 						map.velocityX= map.velocityX-1;
-						console.log(map.velocityX );
-						
 					}
 				}
 				else {
