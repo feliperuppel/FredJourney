@@ -1,3 +1,10 @@
+
+#################
+## Netbeans
+#################
+
+nbproject/
+
 #################
 ## Eclipse
 #################
@@ -213,3 +220,4 @@ pip-log.txt
 
 #Mr Developer
 .mr.developer.cfg
+/nbproject/private/
