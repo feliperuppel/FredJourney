@@ -28,6 +28,8 @@
     // public methods:
     p.initialize = function() {
         
+        p.ContainerInitializer();
+        
         //draw ship body
         this.body = new createjs.Shape();
         this.addChild(this.body);
