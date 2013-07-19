@@ -19,9 +19,9 @@
     p.velocityX = 0;
     p.velocityY = 0;
     
-    p.MAX_VELOCITY = 30;
+    p.MAX_VELOCITY = 15;
     
-    p.NORMAL_VELOCITY = 10;
+    p.NORMAL_VELOCITY = 5;
     
     p.MINIMUN_VELOCITY = 2;
 
