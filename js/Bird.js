@@ -44,7 +44,10 @@
             animations: {
                 down: [0, 3, "down", 4],
                 down_l: [4, 7, "down_l", 4],
-                down_r: [8, 11, "down_r", 4]
+                down_r: [8, 11, "down_r", 4],
+                up: [12, 15, "up", 4],
+                up_l: [39, 39, "up_l", 4],
+                up_r: [39, 39, "up_r", 4]
             }
         });
 
@@ -70,6 +73,16 @@
                 newAnimation = "down_r";
             } else if (map.velocityY < map.velocityX) {
                 newAnimation = "down";
+            }
+        } else if (map.velocityY > 0) {
+
+            var d2 = map.velocityY / 2;
+            if (map.velocityX > 0 && map.velocityX > d2) {
+                newAnimation = "up_l"; // nothing
+            } else if (map.velocityX < 0 && map.velocityX < d2 * -1) {
+                newAnimation = "up_r";
+            } else if (map.velocityY > map.velocityX) {
+                newAnimation = "up";
             }
         } else {
             newAnimation = "down";
