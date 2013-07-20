@@ -1,11 +1,12 @@
-(function (window) {
+(function(window) {
 
     function Bird() {
         this.initialize();
+        this.currentAnimation = "down";
     }
 
-    var p = Bird.prototype = new createjs.Container();
-    
+    var p = Bird.prototype = new createjs.BitmapAnimation();
+
 
     // public properties:
     Bird.TOGGLE = 60;
@@ -24,111 +25,60 @@
 
     p.bounds;
     p.hit;
-    
+
+    p.map;
+
     p.isFlying = false;
 
     // constructor:
     p.Container_initialize = p.initialize; //unique to avoid overiding base class
 
-    p.initialize = function () {
-        this.Container_initialize();
+    var img = new Image();
+    img.src = "assets/Bird.png";
 
-        // cria o espaço do objeto
-        this.shipFlame = new createjs.Shape();
+    p.initialize = function() {
 
-        // cria o corpo do objeto
-        this.shipBody = new createjs.Shape();
+        var localSpriteSheet = new createjs.SpriteSheet({
+            images: [img], //image to use
+            frames: {width: 60, height: 60, regX: 30, regY: 30},
+            animations: {
+                down: [0, 3, "down", 4],
+                down_l: [4, 7, "down_l", 4],
+                down_r: [8, 11, "down_r", 4]
+            }
+        });
 
-        // adiciona ao objeto principal
-        this.addChild(this.shipFlame);
-        this.addChild(this.shipBody);
+        this.Container_initialize(localSpriteSheet);
 
-        this.makeShape();
         this.timeout = 0;
         this.thrust = 0;
         this.vX = 0;
         this.vY = 0;
+
+        this.gotoAndPlay("down");
     };
 
-    // public methods:
-    p.makeShape = function () {
-        //draw ship body // todo substituir por um pássaro
-        var g = this.shipBody.graphics;
-        g.clear();
-        g.beginStroke("#000");
-
-        g.moveTo(0, 10); //nose
-        g.lineTo(5, -6); //rfin
-        g.lineTo(0, -2); //notch
-        g.lineTo(-5, -6); //lfin
-        g.closePath(); // nose
-
-
-        //draw ship flame
-        var o = this.shipFlame;
-        o.scaleX = 0.5;
-        o.scaleY = 0.5;
-        o.y = -5;
-
-        g = o.graphics;
-        g.clear();
-        g.beginStroke("#FFFFFF");
-
-        g.moveTo(2, 0); 	//ship
-        g.lineTo(4, -3); //rpoint
-        g.lineTo(2, -2); //rnotch
-        g.lineTo(0, -5); //tip
-        g.lineTo(-2, -2); //lnotch
-        g.lineTo(-4, -3); //lpoint
-        g.lineTo(-2, -0); //ship
-
-        //furthest visual element
-        this.bounds = 10;
-        this.hit = this.bounds;
-    };
-
-    p.tick = function (event) {
-        //move by velocity
-        this.x += this.vX;
-        this.y += this.vY;
-
-        //with thrust flicker a flame every Ship.TOGGLE frames, attenuate thrust
-        if (this.thrust > 0) {
-            this.timeout++;
-            this.shipFlame.alpha = 1;
-
-            if (this.timeout > Bird.TOGGLE) {
-                this.timeout = 0;
-                if (this.shipFlame.scaleX == 1) {
-                    this.shipFlame.scaleX = 0.5;
-                    this.shipFlame.scaleY = 0.5;
-                } else {
-                    this.shipFlame.scaleX = 1;
-                    this.shipFlame.scaleY = 1;
+    p.tick = function(event) {
+        if (map.velocityY < 0) {
+            
+            var d2 = map.velocityY / 2 ;
+            
+            if(((map.velocityX > 0 && (d2*-1) < map.velocityX) 
+                    || (map.velocityX < 0 && d2 < map.velocityX)) 
+                    && (map.velocityY < map.velocityX || map.velocityX > 0 && map.velocityY * -1 > map.velocityX )) {
+                    
+                if(map.velocityX>0){
+                    this.gotoAndPlay("down_l");
+                }else{
+                    this.gotoAndPlay("down_l");    
                 }
+            } else if( map.velocityX < 0 && map.velocityY < map.velocityX ){
+                this.gotoAndPlay("down");
+            } else {
+                this.gotoAndPlay("down");
             }
-            this.thrust -= 0.5;
-        } else {
-            this.shipFlame.alpha = 0;
-            this.thrust = 0;
         }
-    };
-
-    p.accelerate = function () {
-        //increase push ammount for acceleration
-        this.thrust += this.thrust + 0.6;
-        if (this.thrust >= Bird.MAX_THRUST) {
-            this.thrust = Bird.MAX_THRUST;
-        }
-
-        //accelerate
-        this.vX += Math.sin(this.rotation * (Math.PI / -180)) * this.thrust;
-        this.vY += Math.cos(this.rotation * (Math.PI / -180)) * this.thrust;
-
-        //cap max speeds
-        this.vX = Math.min(Bird.MAX_VELOCITY, Math.max(-Bird.MAX_VELOCITY, this.vX));
-        this.vY = Math.min(Bird.MAX_VELOCITY, Math.max(-Bird.MAX_VELOCITY, this.vY));
     };
 
     window.Bird = Bird;
-} (window));
+}(window));
