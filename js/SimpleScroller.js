@@ -2,7 +2,7 @@
 
 	var SimpleScroller = function(width, height, displayLabel) {
 		this.initialize(width, height, displayLabel);
-	}
+	};
 	var p = SimpleScroller.prototype = new createjs.Container(); // inherit from Container
 	p.bar;
 	p.track;
@@ -44,20 +44,20 @@
 
 		this.addEventListener("click", function(event) {
 			_this.updatePosition(event);
-		})
+		});
 		this.addEventListener("mousedown", function(event) {
             event.addEventListener("mousemove", function(event) {
 				_this.updatePosition(event);
 			});
-		})
+		});
 
 		this.bar.x = this.width - this.height >> 1;
-	}
+	};
 
 	p.updateLabel = function () {
 
 		this.label.text = this.displayLabel + ":" + this.value;
-	}
+	};
 
 	p.updatePosition = function (param) {
 		var event = param;
@@ -70,7 +70,7 @@
 		}
 
 		this.dispatchEvent("change");
-	}
+	};
 
 	window.SimpleScroller = SimpleScroller;
 }());

@@ -52,7 +52,7 @@ function init() {
     canvas = document.getElementById("gameCanvas");
 
     if (canvas == null) {
-        alert("Falhou ao recuperar o elemento canvas!")
+        alert("Falhou ao recuperar o elemento canvas!");
         return;
     }
 
@@ -156,23 +156,23 @@ function tick() {
 
 function movePersons(){
 	
-	var debug = "Persons -> ";
+	var debug = "Persons \n";
 	
 	for (var p in persons){
 		if(persons[p].randomTimeForWalk <= persons[p].countTimeForWalk){
-			persons[p].randomDirection = parseInt(Math.random()*10);
-			persons[p].randomSpeedForWalk = Math.floor(Math.random() * (3 - 1 + 1)) + 1; //(maxSpeed - minSpeed + 1) + minSpeed //cheat to return a randomic value in a range
-			persons[p].randomTimeForWalk = parseInt(Math.random()*10+50);
+			persons[p].setRandomDirection();
+			persons[p].setRandomSpeed(3,1);
+			persons[p].setRandomTime(50);
 			persons[p].countTimeForWalk = 0;
 		}
 		if(persons[p].randomDirection <= 1){
-			persons[p].x = persons[p].x + persons[p].randomSpeedForWalk;
+			persons[p].x += persons[p].randomSpeedForWalk;
 		}else if(persons[p].randomDirection <= 3){
-			persons[p].y = persons[p].y + persons[p].randomSpeedForWalk;
+			persons[p].y += persons[p].randomSpeedForWalk;
 		}else if(persons[p].randomDirection <= 5){
-			persons[p].x = persons[p].x - persons[p].randomSpeedForWalk;
+			persons[p].x -= persons[p].randomSpeedForWalk;
 		}else if(persons[p].randomDirection <= 7){
-			persons[p].y = persons[p].y - persons[p].randomSpeedForWalk;
+			persons[p].y -= persons[p].randomSpeedForWalk;
 		}
 		
 		persons[p].countTimeForWalk++;
@@ -258,7 +258,7 @@ function checkBirdMovements() {
 
     map.y = map.y + map.velocityY;
     map.x = map.x + map.velocityX;
-    velocityField.text = "X:" + map.velocityX + "  Y:" + map.velocityY;
+//    velocityField.text = "X:" + map.velocityX + "  Y:" + map.velocityY;
 
 }
 
@@ -266,7 +266,8 @@ function checkBirdMovements() {
 function handleKeyDown(e) {
     //cross browser issues exist
     if (!e) {
-        var e = window.event;
+//        var e = window.event;
+    	e = window.event;
     }
 
     switch (e.keyCode) {
@@ -302,7 +303,8 @@ function handleKeyDown(e) {
 function handleKeyUp(e) {
     //cross browser issues exist
     if (!e) {
-        var e = window.event;
+//        var e = window.event;
+    	e = window.event;
     }
 
     switch (e.keyCode) {
@@ -314,7 +316,7 @@ function handleKeyUp(e) {
 
         case KEYCODE_D:
         case KEYCODE_RIGHT:
-            movingRight = false
+            movingRight = false;
             return false;
 
         case KEYCODE_W:

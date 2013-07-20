@@ -48,7 +48,7 @@
         this.thrust = 0;
         this.vX = 0;
         this.vY = 0;
-    }
+    };
 
     // public methods:
     p.makeShape = function () {
@@ -85,7 +85,7 @@
         //furthest visual element
         this.bounds = 10;
         this.hit = this.bounds;
-    }
+    };
 
     p.tick = function (event) {
         //move by velocity
@@ -112,7 +112,7 @@
             this.shipFlame.alpha = 0;
             this.thrust = 0;
         }
-    }
+    };
 
     p.accelerate = function () {
         //increase push ammount for acceleration
@@ -128,7 +128,7 @@
         //cap max speeds
         this.vX = Math.min(Bird.MAX_VELOCITY, Math.max(-Bird.MAX_VELOCITY, this.vX));
         this.vY = Math.min(Bird.MAX_VELOCITY, Math.max(-Bird.MAX_VELOCITY, this.vY));
-    }
+    };
 
     window.Bird = Bird;
 } (window));
