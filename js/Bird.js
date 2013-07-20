@@ -5,6 +5,7 @@
     }
 
     var p = Bird.prototype = new createjs.Container();
+    
 
     // public properties:
     Bird.TOGGLE = 60;
