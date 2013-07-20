@@ -23,17 +23,17 @@
     p.Container_initialize = p.initialize; //unique to avoid overiding base class
 
     var img = new Image();
-    img.src = "assets/Bird.png";
+    img.src = "assets/person-moves.png";
 
     p.initialize = function () {
        
     	var localSpriteSheet = new createjs.SpriteSheet({
             images: [img], //image to use
-            frames: {width: 60, height: 60, regX: 30, regY: 30},
+            frames: {width: 60, height: 120, regX: 30, regY: 60},
             animations: {
-                down: [0, 3, "down", 4],
-                down_l: [4, 7, "down_l", 4],
-                down_r: [8, 11, "down_r", 4]
+                down: [0, 11, "down", 4],
+                down_l: [0, 11, "down_l", 4],
+                down_r: [0, 11, "down_r", 4]
             }
         });
 

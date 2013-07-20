@@ -161,29 +161,13 @@ function movePersons(){
 	var debug = "Persons \n";
 	
 	for (var p in persons){
-//		if(persons[p].randomTimeForWalk <= persons[p].countTimeForWalk){
-//			persons[p].setRandomDirection();
-//			persons[p].setRandomSpeed(3,1);
-//			persons[p].setRandomTime(50);
-//			persons[p].countTimeForWalk = 0;
-//		}
-//		if(persons[p].randomDirection <= 1){
-//			persons[p].x += persons[p].randomSpeedForWalk;
-//		}else if(persons[p].randomDirection <= 3){
-//			persons[p].y += persons[p].randomSpeedForWalk;
-//		}else if(persons[p].randomDirection <= 5){
-//			persons[p].x -= persons[p].randomSpeedForWalk;
-//		}else if(persons[p].randomDirection <= 7){
-//			persons[p].y -= persons[p].randomSpeedForWalk;
-//		}
-//		
-//		persons[p].countTimeForWalk++;
+
 		persons[p].tick();
 		
 		debug = debug + " Count : " + persons[p].countTimeForWalk + " Time : " + persons[p].randomTimeForWalk + " Speed : " + persons[p].randomSpeedForWalk + " Direction : " + persons[p].randomDirection + "\n";
 	}
 	
-//	 velocityField.text = debug;
+	 velocityField.text = debug;
 	
 	
 }
