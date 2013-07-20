@@ -8,6 +8,8 @@ var stage;
 var playing = false;
 var bird;
 var map;
+var person;
+var persons;
 
 var KEYCODE_ENTER = 13;		//usefull keycode
 var KEYCODE_SPACE = 32;		//usefull keycode
@@ -96,11 +98,35 @@ function handleClick(event) {
     bird = new Bird();
     bird.x = canvas.width / 2;
     bird.y = canvas.height / 2;
-
+    
+    
+    //TODO corrigir codigos comentados
+    //TODO implementar método de colisão
+    //TODO talvez possamos criar ruas e prédios como objetos 'solid' isso resolveria o problema de fazer as pessoas andarem somente na calçada e nas faixas
+    // Criar container ao inés de de MAP
     map = new Map();
     map.x = -200;
     map.y = -150;
 
+    //creating persons
+    persons = new Array();
+    
+    for(var i = 0; i<3; i++){
+    	person = new Person();
+		person.x = (canvas.width /2) + (i*160);
+		person.y = canvas.height /2;
+		
+    	persons.push(person);
+    	
+    	//Adicionar person ao container ao invés de map
+    	map.addChild(person);
+    }
+    
+    //criar linha como algo abaixo
+    //Trazer o new map lá de cima
+    //map.addChild(container)
+
+    
     stage.clear();
 
     velocityField = new createjs.Text("X:0 Y:0", "bold 14px Arial", "#000");
@@ -110,6 +136,7 @@ function handleClick(event) {
 
     stage.addChild(map);
     stage.addChild(bird);
+   
     stage.addChild(velocityField);
     stage.update();
 
@@ -121,11 +148,42 @@ function handleClick(event) {
 
 }
 
-
-
 function tick() {
     checkBirdMovements();
+    movePersons();
     stage.update();
+}
+
+function movePersons(){
+	
+	var debug = "Persons -> ";
+	
+	for (var p in persons){
+		if(persons[p].randomTimeForWalk <= persons[p].countTimeForWalk){
+			persons[p].randomDirection = parseInt(Math.random()*10);
+			persons[p].randomSpeedForWalk = Math.floor(Math.random() * (3 - 1 + 1)) + 1; //(maxSpeed - minSpeed + 1) + minSpeed //cheat to return a randomic value in a range
+			persons[p].randomTimeForWalk = parseInt(Math.random()*10+50);
+			persons[p].countTimeForWalk = 0;
+		}
+		if(persons[p].randomDirection <= 1){
+			persons[p].x = persons[p].x + persons[p].randomSpeedForWalk;
+		}else if(persons[p].randomDirection <= 3){
+			persons[p].y = persons[p].y + persons[p].randomSpeedForWalk;
+		}else if(persons[p].randomDirection <= 5){
+			persons[p].x = persons[p].x - persons[p].randomSpeedForWalk;
+		}else if(persons[p].randomDirection <= 7){
+			persons[p].y = persons[p].y - persons[p].randomSpeedForWalk;
+		}
+		
+		persons[p].countTimeForWalk++;
+		
+		debug = debug + " Count : " + persons[p].countTimeForWalk + " Time : " + persons[p].randomTimeForWalk + " Speed : " + persons[p].randomSpeedForWalk + " Direction : " + persons[p].randomDirection + "\n";
+		
+	}
+	
+//	 velocityField.text = debug;
+	
+	
 }
 
 function checkBirdMovements() {

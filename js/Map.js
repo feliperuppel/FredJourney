@@ -37,12 +37,12 @@
         this.addChild(this.body);
         
         var g = this.body.graphics;
+        g.beginStroke("#999");
 
         // Create vertical lines
-        for (i = 0; i < 60; i++) {
+        for (var i = 0; i < 60; i++) {
             
             var y = i * 40;    
-            g.beginStroke("#999");
             g.moveTo(0, y); //nose
             g.lineTo(3200, y); //nose
             
@@ -50,10 +50,9 @@
         }
         
         // Create horizontal lines
-        for (i = 0; i < 80; i++) {
+        for (var i = 0; i < 80; i++) {
             
             var x = i * 40;    
-            g.beginStroke("#999");
             g.moveTo(x, 0); //nose
             g.lineTo(x, 2400); //nose
             
