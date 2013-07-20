@@ -46,8 +46,10 @@
                 down_l: [4, 7, "down_l", 4],
                 down_r: [8, 11, "down_r", 4],
                 up: [12, 15, "up", 4],
-                up_l: [39, 39, "up_l", 4],
-                up_r: [39, 39, "up_r", 4]
+                up_l: [4, 7, "up_l", 4],
+                up_r: [8, 11, "up_r", 4],
+                left: [4, 7, "left", 4],
+                right: [8, 11, "right", 4]
             }
         });
 
@@ -73,6 +75,10 @@
                 newAnimation = "down_r";
             } else if (map.velocityY < map.velocityX) {
                 newAnimation = "down";
+            } else if(map.velocityX < 0) {
+                newAnimation = "right";
+            } else {
+                newAnimation = "left";
             }
         } else if (map.velocityY > 0) {
 
@@ -83,6 +89,10 @@
                 newAnimation = "up_r";
             } else if (map.velocityY > map.velocityX) {
                 newAnimation = "up";
+            } else if(map.velocityX < 0) {
+                newAnimation = "right";
+            } else {
+                newAnimation = "left";
             }
         } else {
             newAnimation = "down";
@@ -90,7 +100,9 @@
 
         if (this.currentAnimation !== newAnimation) {
             this.gotoAndPlay(newAnimation)
+            
         }
+        velocityField.text = velocityField.text + "\nMoving: "+newAnimation;
     };
 
     window.Bird = Bird;
