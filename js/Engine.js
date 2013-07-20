@@ -101,12 +101,14 @@ function handleClick(event) {
     
     
     //TODO corrigir codigos comentados
-    //TODO implementar método de colisão
-    //TODO talvez possamos criar ruas e prédios como objetos 'solid' isso resolveria o problema de fazer as pessoas andarem somente na calçada e nas faixas
-    // Criar container ao inés de de MAP
+    //TODO implementar mÃ©todo de colisÃ£o
+    //TODO talvez possamos criar ruas e prÃ©dios como objetos 'solid' isso resolveria o problema de fazer as pessoas andarem somente na calï¿½ada e nas faixas
+    // Criar container ao inï¿½s de de MAP
     map = new Map();
     map.x = -200;
     map.y = -150;
+    
+    bird.map = map;
 
     //creating persons
     persons = new Array();
@@ -118,12 +120,12 @@ function handleClick(event) {
 		
     	persons.push(person);
     	
-    	//Adicionar person ao container ao invés de map
+    	//Adicionar person ao container ao invï¿½s de map
     	map.addChild(person);
     }
     
     //criar linha como algo abaixo
-    //Trazer o new map lá de cima
+    //Trazer o new map lï¿½ de cima
     //map.addChild(container)
 
     
@@ -258,6 +260,8 @@ function checkBirdMovements() {
 
     map.y = map.y + map.velocityY;
     map.x = map.x + map.velocityX;
+    
+    bird.tick();
 //    velocityField.text = "X:" + map.velocityX + "  Y:" + map.velocityY;
 
 }
