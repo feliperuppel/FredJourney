@@ -2,9 +2,10 @@
 
     function Person() {
         this.initialize();
+        this.currentAnimation = "down";
     }
 
-    var p = Person.prototype = new createjs.Container();
+    var p = Person.prototype = new createjs.BitmapAnimation();
 
     // public properties:
     p.shipFlame;
@@ -21,69 +22,31 @@
     // constructor:
     p.Container_initialize = p.initialize; //unique to avoid overiding base class
 
-    
+    var img = new Image();
+    img.src = "assets/Bird.png";
 
     p.initialize = function () {
-        this.Container_initialize();
+       
+    	var localSpriteSheet = new createjs.SpriteSheet({
+            images: [img], //image to use
+            frames: {width: 60, height: 60, regX: 30, regY: 30},
+            animations: {
+                down: [0, 3, "down", 4],
+                down_l: [4, 7, "down_l", 4],
+                down_r: [8, 11, "down_r", 4]
+            }
+        });
 
-        // cria o espaço do objeto
-        this.shipFlame = new createjs.Shape();
-
-        // cria o corpo do objeto
-        this.shipBody = new createjs.Shape();
-
-        // adiciona ao objeto principal
-        this.addChild(this.shipFlame);
-        this.addChild(this.shipBody);
-
-        this.makeShape();
+        this.Container_initialize(localSpriteSheet);
         
         this.setRandomSpeed(3,1);
         this.setRandomDirection();
         this.setRandomTime(50);
         
+        this.gotoAndPlay("down");
+        
     };
-    
-    // public methods:
-    p.makeShape = function () {
-        //draw ship body // todo substituir por uma pessoa
-        var g = this.shipBody.graphics;
-        g.clear();
-        g.beginStroke("#333333");
         
-        g.moveTo(0, 0); //Initial point
-        g.lineTo(0, 120); //left line
-        g.lineTo(60, 120); //upper line
-        g.lineTo(60, 0); //right line
-        g.lineTo(0, 0); //botton line
-        g.closePath(); // nose
-
-
-        //draw ship flame
-        var o = this.shipFlame;
-        o.scaleX = 0.5;
-        o.scaleY = 0.5;
-        o.y = -5;
-
-        g = this.shipBody.graphics;
-        g.clear();
-        g.beginStroke("#000000");
-
-        g.moveTo(0, 0); //Initial point
-        g.lineTo(0, 120); //left line
-        g.lineTo(60, 120); //upper line
-        g.lineTo(60, 0); //right line
-        g.lineTo(0, 0); //botton line
-        g.closePath(); // ?
-        
-        
-
-        //furthest visual element
-        this.bounds = 10;
-        this.hit = this.bounds;
-    };
-    
-    
     p.setRandomSpeed = function (max, min){
     	this.randomSpeedForWalk = Math.floor(Math.random() * (max - min + 1)) + min; //(maxSpeed - minSpeed + 1) + minSpeed //cheat to return a randomic value in a range
     };
@@ -94,6 +57,35 @@
     
     p.setRandomTime = function (averageTime){
     	this.randomTimeForWalk = parseInt(Math.random()*10+averageTime);
+    };
+    
+    p.tick = function(event) {
+    	
+    	if(this.randomTimeForWalk <= this.countTimeForWalk){
+			this.setRandomDirection();
+			this.setRandomSpeed(3,1);
+			this.setRandomTime(50);
+			this.countTimeForWalk = 0;
+		}
+    	
+    	if(this.randomDirection < 8){
+	    	if(this.randomDirection <= 1){
+	    		this.x += this.randomSpeedForWalk;
+	    		this.gotoAndPlay("down_r");
+			}else if(this.randomDirection <= 3){
+				this.y += this.randomSpeedForWalk;
+				this.gotoAndPlay("down");
+			}else if(this.randomDirection <= 5){
+				this.x -= this.randomSpeedForWalk;
+				this.gotoAndPlay("down_l");
+			}else if(this.randomDirection <= 7){
+				this.y -= this.randomSpeedForWalk;
+				this.gotoAndPlay("down");
+			}
+    	}
+    	
+    	this.countTimeForWalk++;
+    	
     };
 
 
