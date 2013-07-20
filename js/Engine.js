@@ -98,8 +98,8 @@ function handleClick(event) {
     bird = new Bird();
     bird.x = canvas.width / 2;
     bird.y = canvas.height / 2;
-    
-    
+
+
     //TODO corrigir codigos comentados
     //TODO implementar método de colisão
     //TODO talvez possamos criar ruas e prédios como objetos 'solid' isso resolveria o problema de fazer as pessoas andarem somente na cal�ada e nas faixas
@@ -107,28 +107,28 @@ function handleClick(event) {
     map = new Map();
     map.x = -200;
     map.y = -150;
-    
+
     bird.map = map;
 
     //creating persons
     persons = new Array();
-    
-    for(var i = 0; i<3; i++){
-    	person = new Person();
-		person.x = (canvas.width /2) + (i*160);
-		person.y = canvas.height /2;
-		
-    	persons.push(person);
-    	
-    	//Adicionar person ao container ao inv�s de map
-    	map.addChild(person);
+
+    for (var i = 0; i < 3; i++) {
+        person = new Person();
+        person.x = (canvas.width / 2) + (i * 160);
+        person.y = canvas.height / 2;
+
+        persons.push(person);
+
+        //Adicionar person ao container ao inv�s de map
+        map.addChild(person);
     }
-    
+
     //criar linha como algo abaixo
     //Trazer o new map l� de cima
     //map.addChild(container)
 
-    
+
     stage.clear();
 
     velocityField = new createjs.Text("X:0 Y:0", "bold 14px Arial", "#000");
@@ -138,7 +138,7 @@ function handleClick(event) {
 
     stage.addChild(map);
     stage.addChild(bird);
-   
+
     stage.addChild(velocityField);
     stage.update();
 
@@ -156,20 +156,10 @@ function tick() {
     stage.update();
 }
 
-function movePersons(){
-	
-	var debug = "Persons \n";
-	
-	for (var p in persons){
-
-		persons[p].tick();
-		
-		debug = debug + " Count : " + persons[p].countTimeForWalk + " Time : " + persons[p].randomTimeForWalk + " Speed : " + persons[p].randomSpeedForWalk + " Direction : " + persons[p].randomDirection + "\n";
-	}
-	
-	 velocityField.text = debug;
-	
-	
+function movePersons() {
+    for (var p in persons) {
+        persons[p].tick();
+    }
 }
 
 function checkBirdMovements() {
@@ -244,9 +234,9 @@ function checkBirdMovements() {
 
     map.y = map.y + map.velocityY;
     map.x = map.x + map.velocityX;
-    
+
+    velocityField.text = "X:" + map.velocityX + "  Y:" + map.velocityY;
     bird.tick();
-//    velocityField.text = "X:" + map.velocityX + "  Y:" + map.velocityY;
 
 }
 
@@ -255,7 +245,7 @@ function handleKeyDown(e) {
     //cross browser issues exist
     if (!e) {
 //        var e = window.event;
-    	e = window.event;
+        e = window.event;
     }
 
     switch (e.keyCode) {
@@ -292,7 +282,7 @@ function handleKeyUp(e) {
     //cross browser issues exist
     if (!e) {
 //        var e = window.event;
-    	e = window.event;
+        e = window.event;
     }
 
     switch (e.keyCode) {
@@ -327,11 +317,11 @@ function handleKeyUp(e) {
 
         case KEYCODE_Q:
             if (bird.isFlying &&
-                    ( (map.velocityX > 0 && map.velocityX <= map.MINIMUN_VELOCITY)
-                            || (map.velocityX <  0 && (map.velocityX * -1) <= map.MINIMUN_VELOCITY)) &&
+                    ((map.velocityX > 0 && map.velocityX <= map.MINIMUN_VELOCITY)
+                            || (map.velocityX < 0 && (map.velocityX * -1) <= map.MINIMUN_VELOCITY)) &&
                     ((map.velocityY > 0 && map.velocityY <= map.MINIMUN_VELOCITY) ||
                             (map.velocityY < 0 && (map.velocityY * -1) <= map.MINIMUN_VELOCITY))
-                ) {
+                    ) {
                 bird.isFlying = false;
                 map.velocityX = 0;
                 map.velocityY = 0;
