@@ -103,7 +103,6 @@ function handleClick(event) {
     //TODO corrigir codigos comentados
     //TODO implementar método de colisão
     //TODO talvez possamos criar ruas e prédios como objetos 'solid' isso resolveria o problema de fazer as pessoas andarem somente na calçada e nas faixas
-    //Melhorar IA - implementar diferentes velocidades para cada pessoa
     // Criar container ao inés de de MAP
     map = new Map();
     map.x = -200;
@@ -149,8 +148,6 @@ function handleClick(event) {
 
 }
 
-
-
 function tick() {
     checkBirdMovements();
     movePersons();
@@ -159,7 +156,7 @@ function tick() {
 
 function movePersons(){
 	
-	var msg = "Persons -> ";
+	var debug = "Persons -> ";
 	
 	for (var p in persons){
 		if(persons[p].randomTimeForWalk <= persons[p].countTimeForWalk){
@@ -180,11 +177,11 @@ function movePersons(){
 		
 		persons[p].countTimeForWalk++;
 		
-		msg = msg + " Count : " + persons[p].countTimeForWalk + " Time : " + persons[p].randomTimeForWalk + " Speed : " + persons[p].randomSpeedForWalk + " Direction : " + persons[p].randomDirection + "\n";
+		debug = debug + " Count : " + persons[p].countTimeForWalk + " Time : " + persons[p].randomTimeForWalk + " Speed : " + persons[p].randomSpeedForWalk + " Direction : " + persons[p].randomDirection + "\n";
 		
 	}
 	
-	 velocityField.text = msg;
+//	 velocityField.text = debug;
 	
 	
 }
@@ -261,7 +258,7 @@ function checkBirdMovements() {
 
     map.y = map.y + map.velocityY;
     map.x = map.x + map.velocityX;
-//    velocityField.text = "X:" + map.velocityX + "  Y:" + map.velocityY;
+    velocityField.text = "X:" + map.velocityX + "  Y:" + map.velocityY;
 
 }
 
