@@ -60,7 +60,7 @@
         }
         
         console.log("Teste....");
-    }
+    };
     window.Map = Map;
 }(window));
 

@@ -13,13 +13,15 @@
     p.bounds;
     p.hit;
     
-    p.randomDirection = parseInt(Math.random()*10);
-    p.randomSpeedForWalk = Math.floor(Math.random() * (3 - 1 + 1)) + 1; //(maxSpeed - minSpeed + 1) + minSpeed //cheat to return a randomic value in a range
-    p.randomTimeForWalk = parseInt(Math.random()*10+50);
+    p.randomDirection;
+    p.randomSpeedForWalk;
+    p.randomTimeForWalk;
     p.countTimeForWalk = 0;
 
     // constructor:
     p.Container_initialize = p.initialize; //unique to avoid overiding base class
+
+    
 
     p.initialize = function () {
         this.Container_initialize();
@@ -35,8 +37,13 @@
         this.addChild(this.shipBody);
 
         this.makeShape();
-    }
-
+        
+        this.setRandomSpeed(3,1);
+        this.setRandomDirection();
+        this.setRandomTime(50);
+        
+    };
+    
     // public methods:
     p.makeShape = function () {
         //draw ship body // todo substituir por uma pessoa
@@ -74,7 +81,21 @@
         //furthest visual element
         this.bounds = 10;
         this.hit = this.bounds;
-    }
+    };
+    
+    
+    p.setRandomSpeed = function (max, min){
+    	this.randomSpeedForWalk = Math.floor(Math.random() * (max - min + 1)) + min; //(maxSpeed - minSpeed + 1) + minSpeed //cheat to return a randomic value in a range
+    };
+    
+    p.setRandomDirection = function (){
+    	this.randomDirection = parseInt(Math.random()*10);
+    };
+    
+    p.setRandomTime = function (averageTime){
+    	this.randomTimeForWalk = parseInt(Math.random()*10+averageTime);
+    };
+
 
     window.Person = Person;
 } (window));
