@@ -59,24 +59,24 @@
     };
 
     p.tick = function(event) {
+        var newAnimation;
+
         if (map.velocityY < 0) {
-            
-            var d2 = map.velocityY / 2 ;
-            
-            if(((map.velocityX > 0 && (d2*-1) < map.velocityX) 
-                    || (map.velocityX < 0 && d2 < map.velocityX)) 
-                    && (map.velocityY < map.velocityX || map.velocityX > 0 && map.velocityY * -1 > map.velocityX )) {
-                    
-                if(map.velocityX>0){
-                    this.gotoAndPlay("down_l");
-                }else{
-                    this.gotoAndPlay("down_l");    
-                }
-            } else if( map.velocityX < 0 && map.velocityY < map.velocityX ){
-                this.gotoAndPlay("down");
-            } else {
-                this.gotoAndPlay("down");
+
+            var d2 = map.velocityY / 2;
+            if (map.velocityX > 0 && map.velocityX > d2 * -1) {
+                newAnimation = "down_l";
+            } else if (map.velocityX < 0 && map.velocityX < d2) {
+                newAnimation = "down_r";
+            } else if (map.velocityY < map.velocityX) {
+                newAnimation = "down";
             }
+        } else {
+            newAnimation = "down";
+        }
+
+        if (this.currentAnimation !== newAnimation) {
+            this.gotoAndPlay(newAnimation)
         }
     };
 
