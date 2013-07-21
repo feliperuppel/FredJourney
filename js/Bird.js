@@ -63,47 +63,90 @@
         this.gotoAndPlay("down");
     };
 
+
+    p.isApproximate = function(a, b) {
+        
+        // We will work with positive values.
+        
+        if (a < 0) {
+            a = a * -1;
+        }
+        
+        if (b < 0) {
+            b = b * -1
+        }
+
+        return (b > a ? b / 2 < a : a / 2 < b);
+    }
+
     p.tick = function(event) {
         var newAnimation;
 
-        if (map.velocityY < 0) {
-
-            var d2 = map.velocityY / 2;
-            if (map.velocityX > 0 && map.velocityX > d2 * -1) {
-                newAnimation = "down_l";
-            } else if (map.velocityX < 0 && map.velocityX < d2) {
-                newAnimation = "down_r";
-            } else if (map.velocityY < map.velocityX) {
-                newAnimation = "down";
-            } else if(map.velocityX < 0) {
-                newAnimation = "right";
-            } else {
-                newAnimation = "left";
+        //Going up?
+        if (map.velocityY > 0) {
+            // Yes
+            // Going left?
+            if (map.velocityX > 0) {
+                // Yes
+                // Check diagonal
+                if (this.isApproximate(map.velocityX, map.velocityY)) {
+                    // In diagonal
+                    newAnimation = "up_l";
+                } else if (map.velocityY > map.velocityX) {
+                    // Not in diagonal
+                    newAnimation = "up";
+                } else {
+                    // Not in diagonal
+                    newAnimation = "left";
+                }
+            } else {// Not going left
+                if (this.isApproximate(map.velocityX, map.velocityY)) {
+                    // In diagonal
+                    newAnimation = "up_r";
+                } else if (map.velocityY > (map.velocityX * -1)) {
+                    // Not in diagonal  
+                    newAnimation = "up";
+                } else {
+                    // Not in diagonal
+                    newAnimation = "right";
+                }
             }
-        } else if (map.velocityY > 0) {
-
-            var d2 = map.velocityY / 2;
-            if (map.velocityX > 0 && map.velocityX > d2) {
-                newAnimation = "up_l"; // nothing
-            } else if (map.velocityX < 0 && map.velocityX < d2 * -1) {
-                newAnimation = "up_r";
-            } else if (map.velocityY > map.velocityX) {
-                newAnimation = "up";
-            } else if(map.velocityX < 0) {
-                newAnimation = "right";
-            } else {
-                newAnimation = "left";
+        } else { // Not going up
+            // Going left?
+            if (map.velocityX > 0) {
+                // Yes
+                // Check diagonal
+                if (this.isApproximate(map.velocityX, map.velocityY)) {
+                    // In diagonal
+                    newAnimation = "down_l";
+                } else if (map.velocityY * -1 > map.velocityX) {
+                    // Not in diagonal
+                    newAnimation = "down";
+                } else {
+                    // Not in diagonal
+                    newAnimation = "left";
+                }
+            } else {// Not going left
+                if (this.isApproximate(map.velocityX, map.velocityY)) {
+                    // In diagonal
+                    newAnimation = "down_r";
+                } else if (map.velocityY < map.velocityX) {
+                    // Not in diagonal
+                    newAnimation = "down";
+                } else {
+                    // Not in diagonal
+                    newAnimation = "right";
+                }
             }
-        } else {
-            newAnimation = "down";
         }
 
         if (this.currentAnimation !== newAnimation) {
             this.gotoAndPlay(newAnimation)
-            
+
         }
-        velocityField.text = velocityField.text + "\nMoving: "+newAnimation;
+        velocityField.text = velocityField.text + "\nMoving: " + newAnimation;
     };
+
 
     window.Bird = Bird;
 }(window));
