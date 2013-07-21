@@ -113,7 +113,7 @@ function handleClick(event) {
     //creating persons
     persons = new Array();
 
-    for (var i = 0; i < 3; i++) {
+    for (var i = 0; i < 8; i++) {
         person = new Person();
         person.x = (canvas.width / 2) + (i * 160);
         person.y = canvas.height / 2;
