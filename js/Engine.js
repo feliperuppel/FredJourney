@@ -100,9 +100,6 @@ function handleClick(event) {
     bird.y = canvas.height / 2;
 
 
-    //TODO corrigir codigos comentados
-    //TODO implementar método de colisão
-    //TODO talvez possamos criar ruas e prédios como objetos 'solid' isso resolveria o problema de fazer as pessoas andarem somente na cal�ada e nas faixas
     // Criar container ao in�s de de MAP
     map = new Map();
     map.x = -200;
@@ -112,10 +109,13 @@ function handleClick(event) {
 
     //creating persons
     persons = new Array();
-
-    for (var i = 0; i < 8; i++) {
-        person = new Person();
-        person.x = (canvas.width / 2) + (i * 160);
+    var max = 8;
+    var min = 4;
+    var randomicPerson;
+    for (var i = 0; i < 20; i++) {
+    	randomicPerson = (Math.floor(Math.random() * (max - min + 1)) + min);
+        person = new Person("assets/person-"+randomicPerson+".png");
+        person.x = (canvas.width / 2) + (i * 95);
         person.y = canvas.height / 2;
 
         persons.push(person);

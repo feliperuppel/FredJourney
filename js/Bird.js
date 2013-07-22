@@ -99,7 +99,7 @@
         }
 
         if (this.currentAnimation !== newAnimation) {
-            this.gotoAndPlay(newAnimation)
+            this.gotoAndPlay(newAnimation);
             
         }
         velocityField.text = velocityField.text + "\nMoving: "+newAnimation;
