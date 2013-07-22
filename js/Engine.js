@@ -11,6 +11,8 @@ var map;
 var person;
 var persons;
 
+var bombs = [];
+
 var KEYCODE_ENTER = 13;		//usefull keycode
 var KEYCODE_SPACE = 32;		//usefull keycode
 var KEYCODE_UP = 38;		//usefull keycode
@@ -22,6 +24,7 @@ var KEYCODE_A = 65;			//usefull keycode
 var KEYCODE_D = 68;
 var KEYCODE_S = 83;
 var KEYCODE_Q = 81;
+var KEYCODE_SPACE = 32;
 
 // vars to control move of Bird ( the thurst is the move of Map)
 var movingUp = false;
@@ -105,10 +108,8 @@ function handleClick(event) {
     //TODO talvez possamos criar ruas e prédios como objetos 'solid' isso resolveria o problema de fazer as pessoas andarem somente na cal�ada e nas faixas
     // Criar container ao in�s de de MAP
     map = new Map();
-    map.x = -200;
-    map.y = -150;
-
-    bird.map = map;
+    map.x = 0;
+    map.y = 0;
 
     //creating persons
     persons = new Array();
@@ -153,12 +154,19 @@ function handleClick(event) {
 function tick() {
     checkBirdMovements();
     movePersons();
+    checkFire();
     stage.update();
 }
 
 function movePersons() {
     for (var p in persons) {
         persons[p].tick();
+    }
+}
+
+function checkFire() {
+    for (var i in bombs) {
+        bombs[i].tick();
     }
 }
 
@@ -235,7 +243,8 @@ function checkBirdMovements() {
     map.y = map.y + map.velocityY;
     map.x = map.x + map.velocityX;
 
-    velocityField.text = "X:" + map.velocityX + "  Y:" + map.velocityY;
+    velocityField.text = "Bird: VX:" + (map.velocityX * -1) + "  VY:" + (map.velocityY * -1) +"\n";
+    velocityField.text = velocityField.text+"Map: X:" + map.x  + "  Y:" + map.y ;
     bird.tick();
 
 }
@@ -329,6 +338,9 @@ function handleKeyUp(e) {
             } else {
                 bird.isFlying = true;
             }
+            return false;
+        case KEYCODE_SPACE:
+            bird.fire();
             return false;
     }
 }
