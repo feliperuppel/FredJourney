@@ -158,7 +158,8 @@
         }
 
         if (this.currentAnimation !== newAnimation) {
-            this.gotoAndPlay(newAnimation)
+            this.gotoAndPlay(newAnimation);
+            
         }
 
     };
