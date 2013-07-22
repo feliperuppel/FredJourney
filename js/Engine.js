@@ -122,7 +122,7 @@ function handleClick(event) {
         persons.push(person);
 
         //Adicionar person ao container ao inv�s de map
-        map.addChild(person);
+        map.addChild(person, ObjectMode.ELEMENT);
     }
 
     //criar linha como algo abaixo

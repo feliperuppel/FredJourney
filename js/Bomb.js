@@ -49,11 +49,15 @@
     };
 
     p.tick = function(event) {
+        
         if (!this.died) {
+            
             if (this.timeout === 0) {
+        
                 this.vX = this.vX - this.decX;
                 this.vY = this.vY - this.decY;
                 this.timeout = 2;
+                
             } else {
                 this.timeout--;
             }
@@ -73,7 +77,7 @@
                 this.died = true;
             }
             
-            console.log("This: " + this.current + "\tPos x:" + this.vX + "\ty:" + this.vY);
+//            console.log("This: " + this.current + "\tPos x:" + this.vX + "\ty:" + this.vY);
             
         }
     };

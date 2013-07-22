@@ -35,7 +35,7 @@
         
         //draw ship body
         this.body = new createjs.Shape();
-        this.addChild(this.body);
+        this.addChild(this.body, ObjectMode.TEXTURE);
         
         var g = this.body.graphics;
         g.beginStroke("#999");
@@ -60,10 +60,16 @@
             g.closePath(); // nose
         }
         
-        console.log("Teste....");
     };
     
-    p.addChild = function(ob){
+    p.addChild = function(ob, mode){
+        
+        if(typeof mode === 'undefined'){
+            mode = ObjectMode.IGNORE;
+            console.log("Object add without mode, it will logged in next line \\/");
+            console.log(ob)
+        }
+        
         p.parent_addChild(ob)
     }
     

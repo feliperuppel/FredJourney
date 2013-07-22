@@ -72,11 +72,13 @@
     p.fire = function() {
 
         if (this.isFlying) {
-            var bomb = new Bomb();
-            map.addChild(bomb);
-            console.log("Firing")
-            bomb.setup();
             
+            var bomb = new Bomb();
+            
+            map.addChild(bomb, ObjectMode.BOMB);
+            
+            bomb.setup();
+
             bomb.current = bombs.length;
 
             bombs.push(bomb);
@@ -159,7 +161,7 @@
 
         if (this.currentAnimation !== newAnimation) {
             this.gotoAndPlay(newAnimation);
-            
+
         }
 
     };
