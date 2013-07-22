@@ -15,18 +15,19 @@
     p.body;
     
     p.ContainerInitializer = p.initialize;
+    p.parent_addChild = p.addChild;
     
     p.velocityX = 0;
     p.velocityY = 0;
     
-    p.MAX_VELOCITY = 15;
+    Map.MAX_VELOCITY = 15;
     
-    p.SWAP_VELOCITY = 10;
+    Map.SWAP_VELOCITY = 10;
     
-    p.NORMAL_VELOCITY = 5;
+    Map.NORMAL_VELOCITY = 5;
     
-    p.MINIMUN_VELOCITY = 2;
-
+    Map.MINIMUN_VELOCITY = 2;
+    
     // public methods:
     p.initialize = function() {
         
@@ -61,6 +62,11 @@
         
         console.log("Teste....");
     };
+    
+    p.addChild = function(ob){
+        p.parent_addChild(ob)
+    }
+    
     window.Map = Map;
 }(window));
 
