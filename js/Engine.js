@@ -155,6 +155,7 @@ function tick() {
     checkBirdMovements();
     movePersons();
     checkFire();
+    map.tick();
     stage.update();
 }
 

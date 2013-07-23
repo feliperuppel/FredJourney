@@ -91,9 +91,11 @@
 
         this.decX = this.vX * .1;
         this.decY = this.vY * .1;
-
-        this.x = (map.x * -1) + canvas.width / 2;
-        this.y = (map.y * -1) + canvas.height / 2;
+        
+        var pos = map.getCenterPos();
+        
+        this.x = pos.x;
+        this.y = pos.y;
 
 //        console.log("Fire x:" + this.x + "\ty:" + this.y);
 //        console.log("Map x:" + map.x + "\ty:" + map.y);
