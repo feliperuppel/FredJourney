@@ -20,14 +20,29 @@
 
     p.current;
 
+    /**
+     * Only used to impact test (w and h)
+     */
+    p.width = 0;
+    p.height = 0;
+
+    p.hitAreaX = 0;
+    p.hitAreaY = 0;
+
     var img = new Image();
     img.src = "assets/Bomb.png";
 
     p.initialize = function() {
 
+        this.height = 15;
+        this.width = 15;
+
+        this.hitAreaX = 12;
+        this.hitAreaY = 12;
+
         var localSpriteSheet = new createjs.SpriteSheet({
             images: [img], //image to use
-            frames: {width: 15, height: 15, regX: 7.5, regY: 7.5},
+            frames: {width: this.width, height: this.width, regX: 7.5, regY: 7.5},
             animations:
                     {
                         right: [0, 3, "right", 4],
@@ -49,15 +64,15 @@
     };
 
     p.tick = function(event) {
-        
+
         if (!this.died) {
-            
+
             if (this.timeout === 0) {
-        
+
                 this.vX = this.vX - this.decX;
                 this.vY = this.vY - this.decY;
                 this.timeout = 2;
-                
+
             } else {
                 this.timeout--;
             }
@@ -69,16 +84,16 @@
                 this.decX = 0;
             }
 
-            if ((this.decY < 0 && this.vY >= 0)||(this.decY > 0 && this.vY <= 0)) {
+            if ((this.decY < 0 && this.vY >= 0) || (this.decY > 0 && this.vY <= 0)) {
                 this.decY = 0;
             }
 
             if (this.decX === 0 && this.decY === 0) {
                 this.died = true;
             }
-            
+
 //            console.log("This: " + this.current + "\tPos x:" + this.vX + "\ty:" + this.vY);
-            
+
         }
     };
 
@@ -91,9 +106,9 @@
 
         this.decX = this.vX * .1;
         this.decY = this.vY * .1;
-        
+
         var pos = map.getCenterPos();
-        
+
         this.x = pos.x;
         this.y = pos.y;
 

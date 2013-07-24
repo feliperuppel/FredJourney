@@ -23,14 +23,31 @@
     // constructor:
     p.Container_initialize = p.initialize; //unique to avoid overiding base class
 
+
+    /**
+     * Only used to impact test (w and h)
+     */
+    p.width = 0;
+    p.height = 0;
+
+    p.hitAreaX = 0;
+    p.hitAreaY = 0;
+    
+
     var img = new Image();
     img.src = "assets/Bird.png";
 
     p.initialize = function() {
 
+        this.height = 60;
+        this.width = 60;
+
+        this.hitAreaX = 40;
+        this.hitAreaY = 40;
+
         var localSpriteSheet = new createjs.SpriteSheet({
             images: [img], //image to use
-            frames: {width: 60, height: 60, regX: 30, regY: 30},
+            frames: {width: this.width, height: this.height, regX: 30, regY: 30},
             animations: {
                 down: [0, 3, "down", 4],
                 down_l: [4, 7, "down_l", 4],

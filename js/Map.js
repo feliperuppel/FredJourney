@@ -39,6 +39,10 @@
 
         //draw ship body
         this.body = new createjs.Shape();
+
+        this.body.hitGain = function() {
+        };
+
         this.addChild(this.body, ObjectMode.TEXTURE);
 
         var g = this.body.graphics;
@@ -92,34 +96,37 @@
             var mode = modes[i];
 
             for (y in childs) {
+                
+                var c = childs[y];
+                
                 // Checa apenas os blocos ( que bloqueiam as passagems das pessoas )
-                if (modes[y] === ObjectMode.BLOCK) {
-                    var c = childs[y];
-                    if (!c.testHit) {
-                        console.log("Can't check impact (found an object without testHit method)");
-                        console.log(c);
-                    } else if (Utils.testHit(curObject, c)) {
-                        if (mode === ObjectMode.ELEMENT) {
+                if (modes[y] === ObjectMode.ELEMENT && c !== curObject) {
+
+                    if (Utils.testHit(curObject, c)) {
+
+                        if (mode === ObjectMode.BLOCK) {
+
                             if (!curObject.cantGoHere) {
-                                console.log("Can't change direction of object (found an object without cantGoHere method)");
-                                console.log(c);
+                                console.log("Can't change direction of " + (typeof curObject) + " (found an object without cantGoHere method)");
                             } else {
                                 curObject.cantGoHere();
                             }
+
                         } else if (mode === ObjectMode.BOMB) {
-                            if (!curObject.cantGoHere) {
-                                console.log("Can't change direction of object (found an object without cantGoHere method)");
-                                console.log(c);
+
+                            if (!curObject.gainHit) {
+                                console.log("Can't hit object type " + (typeof curObject) + " (found an object without gainHit method)");
                             } else {
-                                curObject.cantGoHere();
+                                curObject.gainHit(c);
                             }
+
                         }
                     }
                 }
             }
         }
 
-    }
+    };
 
     p.getCenterPos = function() {
 
@@ -130,7 +137,7 @@
 
         return pos;
 
-    }
+    };
 
     window.Map = Map;
 }(window));

@@ -25,7 +25,10 @@
     p.Container_initialize = p.initialize; //unique to avoid overiding base class
     
     p.imgSrc;
-
+    
+    p.width = 95;
+    p.height = 125;
+    
     p.initialize = function (imgSrc) {
     	var img = new Image();
     	   
@@ -58,7 +61,7 @@
     	
     	var localSpriteSheet = new createjs.SpriteSheet({
             images: [img], //image to use
-            frames: {width: 95, height: 125, regX: 47, regY: 62},
+            frames: {width: this.width, height: this.height, regX: 47, regY: 62},
             animations: {
             	
             	down: [0, 1, "down", 4],
@@ -174,6 +177,13 @@
     	
     };
 
+
+    p.hitGain=function(obj){
+        map.removeChild(obj);
+        var a = bombs.indexOf(obj);
+        bombs.slice(a, 1);
+        map.removeChild(this);
+    }
 
     window.Person = Person;
 } (window));
