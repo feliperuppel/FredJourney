@@ -33,6 +33,8 @@
     img.src = "assets/Bomb.png";
 
     p.initialize = function() {
+        
+        this.name = "Bomb";
 
         this.height = 15;
         this.width = 15;

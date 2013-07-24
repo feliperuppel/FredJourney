@@ -38,7 +38,9 @@
     img.src = "assets/Bird.png";
 
     p.initialize = function() {
-
+        
+        this.name = "Bird";
+        
         this.height = 60;
         this.width = 60;
 

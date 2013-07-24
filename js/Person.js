@@ -30,6 +30,9 @@
     p.height = 125;
     
     p.initialize = function (imgSrc) {
+        
+        this.name = "Person";
+        
     	var img = new Image();
     	   
     	img.src = imgSrc;
