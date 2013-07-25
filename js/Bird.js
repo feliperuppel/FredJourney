@@ -1,134 +1,188 @@
-(function (window) {
+(function(window) {
 
     function Bird() {
         this.initialize();
+        this.currentAnimation = "down";
     }
 
-    var p = Bird.prototype = new createjs.Container();
-    
+    var p = Bird.prototype = new createjs.BitmapAnimation();
 
-    // public properties:
-    Bird.TOGGLE = 60;
-    Bird.MAX_THRUST = 2;
-    Bird.MAX_VELOCITY = 5;
+    Bird.UP = 0;
+    Bird.UP_RIGHT = 1;
+    Bird.RIGHT = 2;
+    Bird.DOWN_RIGHT = 3;
+    Bird.DOWN = 4;
+    Bird.DOWN_LEFT = 5;
+    Bird.LEFT = 6;
+    Bird.UP_LEFT = 7;
 
-    // public properties:
-    p.shipFlame;
-    p.shipBody;
+    Bird.currentDirection = 4;
 
-    p.timeout;
-    p.thrust;
-
-    p.vX;
-    p.vY;
-
-    p.bounds;
-    p.hit;
-    
     p.isFlying = false;
 
     // constructor:
     p.Container_initialize = p.initialize; //unique to avoid overiding base class
 
-    p.initialize = function () {
-        this.Container_initialize();
 
-        // cria o espaço do objeto
-        this.shipFlame = new createjs.Shape();
+    /**
+     * Only used to impact test (w and h)
+     */
+    p.width = 0;
+    p.height = 0;
 
-        // cria o corpo do objeto
-        this.shipBody = new createjs.Shape();
+    p.hitAreaX = 0;
+    p.hitAreaY = 0;
+    
 
-        // adiciona ao objeto principal
-        this.addChild(this.shipFlame);
-        this.addChild(this.shipBody);
+    var img = new Image();
+    img.src = "assets/Bird.png";
 
-        this.makeShape();
+    p.initialize = function() {
+        
+        this.name = "Bird";
+        
+        this.height = 60;
+        this.width = 60;
+
+        this.hitAreaX = 40;
+        this.hitAreaY = 40;
+
+        var localSpriteSheet = new createjs.SpriteSheet({
+            images: [img], //image to use
+            frames: {width: this.width, height: this.height, regX: 30, regY: 30},
+            animations: {
+                down: [0, 3, "down", 4],
+                down_l: [4, 7, "down_l", 4],
+                down_r: [8, 11, "down_r", 4],
+                up: [12, 15, "up", 4],
+                up_l: [4, 7, "up_l", 4],
+                up_r: [8, 11, "up_r", 4],
+                left: [4, 7, "left", 4],
+                right: [8, 11, "right", 4]
+            }
+        });
+
+        this.Container_initialize(localSpriteSheet);
+
         this.timeout = 0;
         this.thrust = 0;
         this.vX = 0;
         this.vY = 0;
+
+        this.gotoAndPlay("down");
     };
 
-    // public methods:
-    p.makeShape = function () {
-        //draw ship body // todo substituir por um pássaro
-        var g = this.shipBody.graphics;
-        g.clear();
-        g.beginStroke("#000");
 
-        g.moveTo(0, 10); //nose
-        g.lineTo(5, -6); //rfin
-        g.lineTo(0, -2); //notch
-        g.lineTo(-5, -6); //lfin
-        g.closePath(); // nose
+    p.isApproximate = function(a, b) {
+
+        // We will work with positive values.
+
+        if (a < 0) {
+            a = a * -1;
+        }
+
+        if (b < 0) {
+            b = b * -1
+        }
+
+        return (b > a ? b / 2 < a : a / 2 < b);
+    }
+
+    p.fire = function() {
+
+        if (this.isFlying) {
+            
+            var bomb = new Bomb();
+            
+            map.addChild(bomb, ObjectMode.BOMB);
+            
+            bomb.setup();
+
+            bomb.current = bombs.length;
+
+            bombs.push(bomb);
+        }
+    }
 
 
-        //draw ship flame
-        var o = this.shipFlame;
-        o.scaleX = 0.5;
-        o.scaleY = 0.5;
-        o.y = -5;
+    p.tick = function(event) {
+        var newAnimation;
 
-        g = o.graphics;
-        g.clear();
-        g.beginStroke("#FFFFFF");
-
-        g.moveTo(2, 0); 	//ship
-        g.lineTo(4, -3); //rpoint
-        g.lineTo(2, -2); //rnotch
-        g.lineTo(0, -5); //tip
-        g.lineTo(-2, -2); //lnotch
-        g.lineTo(-4, -3); //lpoint
-        g.lineTo(-2, -0); //ship
-
-        //furthest visual element
-        this.bounds = 10;
-        this.hit = this.bounds;
-    };
-
-    p.tick = function (event) {
-        //move by velocity
-        this.x += this.vX;
-        this.y += this.vY;
-
-        //with thrust flicker a flame every Ship.TOGGLE frames, attenuate thrust
-        if (this.thrust > 0) {
-            this.timeout++;
-            this.shipFlame.alpha = 1;
-
-            if (this.timeout > Bird.TOGGLE) {
-                this.timeout = 0;
-                if (this.shipFlame.scaleX == 1) {
-                    this.shipFlame.scaleX = 0.5;
-                    this.shipFlame.scaleY = 0.5;
+        //Going up?
+        if (map.velocityY > 0) {
+            // Yes
+            // Going left?
+            if (map.velocityX > 0) {
+                // Yes
+                // Check diagonal
+                if (this.isApproximate(map.velocityX, map.velocityY)) {
+                    // In diagonal
+                    newAnimation = "up_l";
+                    bird.currentDirection = Bird.UP_LEFT;
+                } else if (map.velocityY > map.velocityX) {
+                    // Not in diagonal
+                    newAnimation = "up";
+                    bird.currentDirection = Bird.UP;
                 } else {
-                    this.shipFlame.scaleX = 1;
-                    this.shipFlame.scaleY = 1;
+                    // Not in diagonal
+                    newAnimation = "left";
+                    bird.currentDirection = Bird.LEFT;
+                }
+            } else {// Not going left
+                if (this.isApproximate(map.velocityX, map.velocityY)) {
+                    // In diagonal
+                    newAnimation = "up_r";
+                    bird.currentDirection = Bird.UP_RIGHT;
+                } else if (map.velocityY > (map.velocityX * -1)) {
+                    // Not in diagonal  
+                    newAnimation = "up";
+                    bird.currentDirection = Bird.UP;
+                } else {
+                    // Not in diagonal
+                    newAnimation = "right";
+                    bird.currentDirection = Bird.RIGHT;
                 }
             }
-            this.thrust -= 0.5;
-        } else {
-            this.shipFlame.alpha = 0;
-            this.thrust = 0;
+        } else { // Not going up
+            // Going left?
+            if (map.velocityX > 0) {
+                // Yes
+                // Check diagonal
+                if (this.isApproximate(map.velocityX, map.velocityY)) {
+                    // In diagonal
+                    newAnimation = "down_l";
+                    bird.currentDirection = Bird.DOWN_LEFT;
+                } else if (map.velocityY * -1 > map.velocityX) {
+                    // Not in diagonal
+                    newAnimation = "down";
+                    bird.currentDirection = Bird.DOWN;
+                } else {
+                    // Not in diagonal
+                    newAnimation = "left";
+                    bird.currentDirection = Bird.LEFT;
+                }
+            } else {// Not going left
+                if (this.isApproximate(map.velocityX, map.velocityY)) {
+                    // In diagonal
+                    newAnimation = "down_r";
+                    bird.currentDirection = Bird.DOWN_RIGHT;
+                } else if (map.velocityY < map.velocityX) {
+                    // Not in diagonal
+                    newAnimation = "down";
+                    bird.currentDirection = Bird.DOWN;
+                } else {
+                    // Not in diagonal
+                    newAnimation = "right";
+                    bird.currentDirection = Bird.RIGHT;
+                }
+            }
         }
-    };
 
-    p.accelerate = function () {
-        //increase push ammount for acceleration
-        this.thrust += this.thrust + 0.6;
-        if (this.thrust >= Bird.MAX_THRUST) {
-            this.thrust = Bird.MAX_THRUST;
+        if (this.currentAnimation !== newAnimation) {
+            this.gotoAndPlay(newAnimation);
+
         }
 
-        //accelerate
-        this.vX += Math.sin(this.rotation * (Math.PI / -180)) * this.thrust;
-        this.vY += Math.cos(this.rotation * (Math.PI / -180)) * this.thrust;
-
-        //cap max speeds
-        this.vX = Math.min(Bird.MAX_VELOCITY, Math.max(-Bird.MAX_VELOCITY, this.vX));
-        this.vY = Math.min(Bird.MAX_VELOCITY, Math.max(-Bird.MAX_VELOCITY, this.vY));
     };
-
     window.Bird = Bird;
-} (window));
+}(window));

@@ -13,54 +13,146 @@
     p.height = p.visbleHeight * 4;
 
     p.body;
-    
+
+    // Some methods of Container will be changed
     p.ContainerInitializer = p.initialize;
-    
+    p.parent_addChild = p.addChild;
+    p.parent_removeChild = p.removeChild;
+
     p.velocityX = 0;
     p.velocityY = 0;
-    
-    p.MAX_VELOCITY = 15;
-    
-    p.SWAP_VELOCITY = 10;
-    
-    p.NORMAL_VELOCITY = 5;
-    
-    p.MINIMUN_VELOCITY = 2;
+
+    var childs = [];
+
+    var modes = [];
+
+    Map.MAX_VELOCITY = 15;
+
+    Map.SWAP_VELOCITY = 10;
+
+    Map.NORMAL_VELOCITY = 5;
+
+    Map.MINIMUN_VELOCITY = 2;
 
     // public methods:
     p.initialize = function() {
-        
+
         p.ContainerInitializer();
-        
+
         //draw ship body
         this.body = new createjs.Shape();
-        this.addChild(this.body);
-        
+
+        this.body.hitGain = function() {
+        };
+
+        this.addChild(this.body, ObjectMode.TEXTURE);
+
         var g = this.body.graphics;
         g.beginStroke("#999");
 
         // Create vertical lines
         for (var i = 0; i < 60; i++) {
-            
-            var y = i * 40;    
+
+            var y = i * 40;
             g.moveTo(0, y); //nose
             g.lineTo(3200, y); //nose
-            
+
             g.closePath(); // nose
         }
-        
+
         // Create horizontal lines
         for (var i = 0; i < 80; i++) {
-            
-            var x = i * 40;    
+
+            var x = i * 40;
             g.moveTo(x, 0); //nose
             g.lineTo(x, 2400); //nose
-            
+
             g.closePath(); // nose
         }
-        
-        console.log("Teste....");
+
     };
+
+    p.addChild = function(ob, mode) {
+
+        if (typeof mode === 'undefined') {
+            mode = ObjectMode.IGNORE;
+            console.log("Object add without mode, it will logged in next line \\/");
+            console.log(ob)
+        }
+
+        this.parent_addChild(ob);
+
+        if (mode === ObjectMode.BLOCK || mode === ObjectMode.BOMB ||
+                mode === ObjectMode.ELEMENT) {
+
+            childs.push(ob);
+            modes.push(mode);
+        }
+    }
+
+    p.removeChild = function(ob) {
+        this.parent_removeChild(ob)
+        var i = childs.indexOf(ob);
+        childs.slice(i, 1);
+        modes.slice(i, 1);
+    }
+
+    p.tick = function() {
+
+        for (i in childs) {
+
+            // Executa um loop em todos os elementos
+
+            var curObject = childs[i];
+            var mode = modes[i];
+
+            // É um objeto que pode gerar impacto?
+            if (mode != ObjectMode.FLY && mode != ObjectMode.IGNORE && mode !== ObjectMode.TEXTURE) {
+
+
+                // Sim, loopa novamente todos os objetos
+                for (y in childs) {
+
+                    var c = childs[y];
+                    
+                    // O object é do tipo Element (Pessoa)? 
+                    if (modes[y] === ObjectMode.ELEMENT && c !== curObject) {
+                        // O objeto está preparado para receber impacto?
+
+                        if (!c.impact) {
+                    
+                            // Não ignora, mas gera o erro
+                            console.log("Object not suport impact " + (curObject.name || typeof curObject) + " (found an object without impact method)");
+
+                        } else {
+
+                            // Sim, testa o hit
+                            if (Utils.testHit(curObject, c)) {
+
+                                // Foi hitado, notifica o objeto
+                                c.impact(curObject, mode);
+
+                            }
+
+                        }
+                    }
+                }
+            }
+        }
+
+    };
+
+    p.getCenterPos = function() {
+
+        var pos = {};
+
+        pos.x = (this.x * -1) + canvas.width / 2;
+        pos.y = (this.y * -1) + canvas.height / 2;
+
+        return pos;
+
+    };
+
     window.Map = Map;
 }(window));
 
