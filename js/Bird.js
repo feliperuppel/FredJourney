@@ -7,40 +7,49 @@
 
     var p = Bird.prototype = new createjs.BitmapAnimation();
 
+    Bird.UP = 0;
+    Bird.UP_RIGHT = 1;
+    Bird.RIGHT = 2;
+    Bird.DOWN_RIGHT = 3;
+    Bird.DOWN = 4;
+    Bird.DOWN_LEFT = 5;
+    Bird.LEFT = 6;
+    Bird.UP_LEFT = 7;
 
-    // public properties:
-    Bird.TOGGLE = 60;
-    Bird.MAX_THRUST = 2;
-    Bird.MAX_VELOCITY = 5;
-
-    // public properties:
-    p.shipFlame;
-    p.shipBody;
-
-    p.timeout;
-    p.thrust;
-
-    p.vX;
-    p.vY;
-
-    p.bounds;
-    p.hit;
-
-    p.map;
+    Bird.currentDirection = 4;
 
     p.isFlying = false;
 
     // constructor:
     p.Container_initialize = p.initialize; //unique to avoid overiding base class
 
+
+    /**
+     * Only used to impact test (w and h)
+     */
+    p.width = 0;
+    p.height = 0;
+
+    p.hitAreaX = 0;
+    p.hitAreaY = 0;
+    
+
     var img = new Image();
     img.src = "assets/Bird.png";
 
     p.initialize = function() {
+        
+        this.name = "Bird";
+        
+        this.height = 60;
+        this.width = 60;
+
+        this.hitAreaX = 40;
+        this.hitAreaY = 40;
 
         var localSpriteSheet = new createjs.SpriteSheet({
             images: [img], //image to use
-            frames: {width: 60, height: 60, regX: 30, regY: 30},
+            frames: {width: this.width, height: this.height, regX: 30, regY: 30},
             animations: {
                 down: [0, 3, "down", 4],
                 down_l: [4, 7, "down_l", 4],
@@ -63,47 +72,117 @@
         this.gotoAndPlay("down");
     };
 
+
+    p.isApproximate = function(a, b) {
+
+        // We will work with positive values.
+
+        if (a < 0) {
+            a = a * -1;
+        }
+
+        if (b < 0) {
+            b = b * -1
+        }
+
+        return (b > a ? b / 2 < a : a / 2 < b);
+    }
+
+    p.fire = function() {
+
+        if (this.isFlying) {
+            
+            var bomb = new Bomb();
+            
+            map.addChild(bomb, ObjectMode.BOMB);
+            
+            bomb.setup();
+
+            bomb.current = bombs.length;
+
+            bombs.push(bomb);
+        }
+    }
+
+
     p.tick = function(event) {
         var newAnimation;
 
-        if (map.velocityY < 0) {
-
-            var d2 = map.velocityY / 2;
-            if (map.velocityX > 0 && map.velocityX > d2 * -1) {
-                newAnimation = "down_l";
-            } else if (map.velocityX < 0 && map.velocityX < d2) {
-                newAnimation = "down_r";
-            } else if (map.velocityY < map.velocityX) {
-                newAnimation = "down";
-            } else if(map.velocityX < 0) {
-                newAnimation = "right";
-            } else {
-                newAnimation = "left";
+        //Going up?
+        if (map.velocityY > 0) {
+            // Yes
+            // Going left?
+            if (map.velocityX > 0) {
+                // Yes
+                // Check diagonal
+                if (this.isApproximate(map.velocityX, map.velocityY)) {
+                    // In diagonal
+                    newAnimation = "up_l";
+                    bird.currentDirection = Bird.UP_LEFT;
+                } else if (map.velocityY > map.velocityX) {
+                    // Not in diagonal
+                    newAnimation = "up";
+                    bird.currentDirection = Bird.UP;
+                } else {
+                    // Not in diagonal
+                    newAnimation = "left";
+                    bird.currentDirection = Bird.LEFT;
+                }
+            } else {// Not going left
+                if (this.isApproximate(map.velocityX, map.velocityY)) {
+                    // In diagonal
+                    newAnimation = "up_r";
+                    bird.currentDirection = Bird.UP_RIGHT;
+                } else if (map.velocityY > (map.velocityX * -1)) {
+                    // Not in diagonal  
+                    newAnimation = "up";
+                    bird.currentDirection = Bird.UP;
+                } else {
+                    // Not in diagonal
+                    newAnimation = "right";
+                    bird.currentDirection = Bird.RIGHT;
+                }
             }
-        } else if (map.velocityY > 0) {
-
-            var d2 = map.velocityY / 2;
-            if (map.velocityX > 0 && map.velocityX > d2) {
-                newAnimation = "up_l"; // nothing
-            } else if (map.velocityX < 0 && map.velocityX < d2 * -1) {
-                newAnimation = "up_r";
-            } else if (map.velocityY > map.velocityX) {
-                newAnimation = "up";
-            } else if(map.velocityX < 0) {
-                newAnimation = "right";
-            } else {
-                newAnimation = "left";
+        } else { // Not going up
+            // Going left?
+            if (map.velocityX > 0) {
+                // Yes
+                // Check diagonal
+                if (this.isApproximate(map.velocityX, map.velocityY)) {
+                    // In diagonal
+                    newAnimation = "down_l";
+                    bird.currentDirection = Bird.DOWN_LEFT;
+                } else if (map.velocityY * -1 > map.velocityX) {
+                    // Not in diagonal
+                    newAnimation = "down";
+                    bird.currentDirection = Bird.DOWN;
+                } else {
+                    // Not in diagonal
+                    newAnimation = "left";
+                    bird.currentDirection = Bird.LEFT;
+                }
+            } else {// Not going left
+                if (this.isApproximate(map.velocityX, map.velocityY)) {
+                    // In diagonal
+                    newAnimation = "down_r";
+                    bird.currentDirection = Bird.DOWN_RIGHT;
+                } else if (map.velocityY < map.velocityX) {
+                    // Not in diagonal
+                    newAnimation = "down";
+                    bird.currentDirection = Bird.DOWN;
+                } else {
+                    // Not in diagonal
+                    newAnimation = "right";
+                    bird.currentDirection = Bird.RIGHT;
+                }
             }
-        } else {
-            newAnimation = "down";
         }
 
         if (this.currentAnimation !== newAnimation) {
             this.gotoAndPlay(newAnimation);
-            
-        }
-        velocityField.text = velocityField.text + "\nMoving: "+newAnimation;
-    };
 
+        }
+
+    };
     window.Bird = Bird;
 }(window));

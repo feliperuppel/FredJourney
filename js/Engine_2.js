@@ -36,10 +36,6 @@ document.onkeydown = handleKeyDown;
 document.onkeyup = handleKeyUp;
 
 function init() {
-    
-    // Configure frame rate
-//    createjs.Ticker.useRAF = true;
-//    createjs.Ticker.setFPS(60);
 
     // Checa se há plugin de som disponível
     if (!createjs.Sound.initializeDefaultPlugins()) {
@@ -121,7 +117,7 @@ function handleClick(event) {
     	randomicPerson = (Math.floor(Math.random() * (max - min + 1)) + min);
         person = new Person("assets/person-"+randomicPerson+".png");
         person.x = (canvas.width / 2) + (i * 95);
-        person.y = (canvas.height / 2)+(i*125) ;
+        person.y = canvas.height / 2;
 
         persons.push(person);
 
