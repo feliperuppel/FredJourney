@@ -14,8 +14,10 @@
 
     p.body;
 
+    // Some methods of Container will be changed
     p.ContainerInitializer = p.initialize;
     p.parent_addChild = p.addChild;
+    p.parent_removeChild = p.removeChild;
 
     p.velocityX = 0;
     p.velocityY = 0;
@@ -78,7 +80,7 @@
             console.log(ob)
         }
 
-        p.parent_addChild(ob);
+        this.parent_addChild(ob);
 
         if (mode === ObjectMode.BLOCK || mode === ObjectMode.BOMB ||
                 mode === ObjectMode.ELEMENT) {
@@ -88,36 +90,48 @@
         }
     }
 
+    p.removeChild = function(ob) {
+        this.parent_removeChild(ob)
+        var i = childs.indexOf(ob);
+        childs.slice(i, 1);
+        modes.slice(i, 1);
+    }
+
     p.tick = function() {
 
         for (i in childs) {
 
+            // Executa um loop em todos os elementos
+
             var curObject = childs[i];
             var mode = modes[i];
 
-            for (y in childs) {
-                
-                var c = childs[y];
-                
-                // Checa apenas os blocos ( que bloqueiam as passagems das pessoas )
-                if (modes[y] === ObjectMode.ELEMENT && c !== curObject) {
+            // É um objeto que pode gerar impacto?
+            if (mode != ObjectMode.FLY && mode != ObjectMode.IGNORE && mode !== ObjectMode.TEXTURE) {
 
-                    if (Utils.testHit(curObject, c)) {
 
-                        if (mode === ObjectMode.BLOCK) {
+                // Sim, loopa novamente todos os objetos
+                for (y in childs) {
 
-                            if (!curObject.cantGoHere) {
-                                console.log("Can't change direction of " + (typeof curObject) + " (found an object without cantGoHere method)");
-                            } else {
-                                curObject.cantGoHere();
-                            }
+                    var c = childs[y];
+                    
+                    // O object é do tipo Element (Pessoa)? 
+                    if (modes[y] === ObjectMode.ELEMENT && c !== curObject) {
+                        // O objeto está preparado para receber impacto?
 
-                        } else if (mode === ObjectMode.BOMB) {
+                        if (!c.impact) {
+                    
+                            // Não ignora, mas gera o erro
+                            console.log("Object not suport impact " + (curObject.name || typeof curObject) + " (found an object without impact method)");
 
-                            if (!curObject.gainHit) {
-                                console.log("Can't hit object type " + (typeof curObject) + " (found an object without gainHit method)");
-                            } else {
-                                curObject.gainHit(c);
+                        } else {
+
+                            // Sim, testa o hit
+                            if (Utils.testHit(curObject, c)) {
+
+                                // Foi hitado, notifica o objeto
+                                c.impact(curObject, mode);
+
                             }
 
                         }

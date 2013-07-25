@@ -34,6 +34,7 @@
 
     p.initialize = function() {
         
+        this.active = true;
         this.name = "Bomb";
 
         this.height = 15;

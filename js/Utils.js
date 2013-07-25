@@ -1,7 +1,5 @@
 var Utils = {};
 Utils.testHit = function(a, b) {
-
-
     returnValue = false;
     if (!a.hitAreaX) {
         a.hitAreaX = a.width;
@@ -39,7 +37,7 @@ Utils.testHit = function(a, b) {
             && oba.a.y >= obb.a.y && oba.a.y <= obb.d.y) {
         returnValue = true;
     }
-
+    
     return returnValue;
 }
 
