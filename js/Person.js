@@ -194,7 +194,7 @@
                 console.log("This Person ("+this.id+") has encontered an Block");
             }
         }
-    }
+    };
 
     window.Person = Person;
 }(window));

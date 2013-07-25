@@ -117,7 +117,7 @@ function handleClick(event) {
     var max = 8;
     var min = 4;
     var randomicPerson;
-    for (var i = 0; i < 20; i++) {
+    for (var i = 0; i < 5; i++) {
     	randomicPerson = (Math.floor(Math.random() * (max - min + 1)) + min);
         person = new Person("assets/person-"+randomicPerson+".png");
         person.x = (canvas.width / 2) + (i * 95);
