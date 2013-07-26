@@ -1,7 +1,4 @@
 
-var messageField;       //Message display field
-var velocityField;
-var scoreField;         //score Field
 var canvas;
 var stage;
 
@@ -36,21 +33,11 @@ document.onkeydown = handleKeyDown;
 document.onkeyup = handleKeyUp;
 
 function init() {
-
-    // Checa se há plugin de som disponível
-    if (!createjs.Sound.initializeDefaultPlugins()) {
-        alert("Falha ao iniciar o som");
-        document.getElementById("content").style.display = "none";
-        return;
-    }
-
-    // Checa o borwser.
-    //if (createjs.Sound.BrowserDetect.isIOS || createjs.Sound.BrowserDetect.isAndroid) {  // || createjs.Sound.BrowserDetect.isBlackberry  OJR blackberry has not been tested yet
-    //document.getElementById("mobile").style.display = "block";
-    //document.getElementById("content").style.display = "none";
-    //return;
-    //}
-
+    
+    // Configure frame rate
+    createjs.Ticker.useRAF = true;
+    createjs.Ticker.setFPS(30);
+    
     // Pega o canvas
     canvas = document.getElementById("gameCanvas");
 
@@ -62,39 +49,12 @@ function init() {
     // Cria o palco
     stage = new createjs.Stage(canvas);
 
-    messageField = new createjs.Text("Loading", "bold 24px Arial", "#000");
-
-    messageField.maxWidth = 1000;
-    messageField.textAlign = "center";
-    messageField.x = canvas.width / 2;
-    messageField.y = canvas.height / 2;
-    stage.addChild(messageField);
     stage.update();     //update the stage to show text
-
-    scoreField = new createjs.Text("0", "bold 12px Arial", "#FFFFFF");
-    scoreField.textAlign = "right";
-    scoreField.x = canvas.width - 10;
-    scoreField.y = 22;
-    scoreField.maxWidth = 1000;
-
-    messageField.text = "Welcome: Click to play";
-
-    //watch for clicks
-    stage.addChild(messageField);
-    stage.update();     //update the stage to show text
-    canvas.onclick = handleClick;
-
-}
-
-function handleClick(event) {
+    //
     //prevent extra clicks and hide text
-    canvas.onclick = null;
-    stage.removeChild(messageField);
 
     //hide anything on stage and show the score
     stage.removeAllChildren();
-    scoreField.text = (0).toString();
-    stage.addChild(scoreField);
 
     //create the player
     playing = true;
@@ -112,18 +72,24 @@ function handleClick(event) {
     persons = new Array();
     var max = 8;
     var min = 4;
-    var randomicPerson;
-    for (var i = 0; i < 20; i++) {
-    	randomicPerson = (Math.floor(Math.random() * (max - min + 1)) + min);
-        person = new Person("assets/person-"+randomicPerson+".png");
-        person.x = (canvas.width / 2) + (i * 95);
-        person.y = canvas.height / 2;
+    var randomicPerson = 3;
 
-        persons.push(person);
+    person = new Person("assets/person-" + 4 + ".png");
+    person.x = 290;
+    person.y = 250;
 
-        //Adicionar person ao container ao inv�s de map
-        map.addChild(person, ObjectMode.ELEMENT);
-    }
+    persons.push(person);
+
+    map.addChild(person, ObjectMode.ELEMENT);
+    
+    person = new Person("assets/person-" + 4 + ".png");
+    person.x = 380;
+    person.y = 130;
+
+    persons.push(person);
+
+    map.addChild(person, ObjectMode.ELEMENT);
+
 
     //criar linha como algo abaixo
     //Trazer o new map l� de cima
@@ -138,7 +104,7 @@ function handleClick(event) {
     velocityField.y = 22;
 
     stage.addChild(map);
-    stage.addChild(bird);
+//    stage.addChild(bird);
 
     stage.addChild(velocityField);
     stage.update();
@@ -153,8 +119,8 @@ function handleClick(event) {
 
 function tick() {
     checkBirdMovements();
-    movePersons();
-    checkFire();
+//    movePersons();
+//    checkFire();
     map.tick();
     stage.update();
 }
@@ -244,8 +210,8 @@ function checkBirdMovements() {
     map.y = map.y + map.velocityY;
     map.x = map.x + map.velocityX;
 
-    velocityField.text = "Bird: VX:" + (map.velocityX * -1) + "  VY:" + (map.velocityY * -1) +"\n";
-    velocityField.text = velocityField.text+"Map: X:" + map.x  + "  Y:" + map.y ;
+    velocityField.text = "Bird: VX:" + (map.velocityX * -1) + "  VY:" + (map.velocityY * -1) + "\n";
+    velocityField.text = velocityField.text + "Map: X:" + map.x + "  Y:" + map.y;
     bird.tick();
 
 }

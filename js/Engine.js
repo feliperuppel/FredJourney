@@ -331,10 +331,10 @@ function handleKeyUp(e) {
 
         case KEYCODE_Q:
             if (bird.isFlying &&
-                    ((map.velocityX > 0 && map.velocityX <= Map.MINIMUN_VELOCITY)
-                            || (map.velocityX < 0 && (map.velocityX * -1) <= Map.MINIMUN_VELOCITY)) &&
-                    ((map.velocityY > 0 && map.velocityY <= Map.MINIMUN_VELOCITY) ||
-                            (map.velocityY < 0 && (map.velocityY * -1) <= Map.MINIMUN_VELOCITY))
+                    ((map.velocityX >= 0 && map.velocityX <= Map.MINIMUN_VELOCITY)
+                            || (map.velocityX <= 0 && (map.velocityX * -1) <= Map.MINIMUN_VELOCITY)) &&
+                    ((map.velocityY >= 0 && map.velocityY <= Map.MINIMUN_VELOCITY) ||
+                            (map.velocityY <= 0 && (map.velocityY * -1) <= Map.MINIMUN_VELOCITY))
                     ) {
                 bird.isFlying = false;
                 map.velocityX = 0;
