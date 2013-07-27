@@ -35,8 +35,16 @@ var movingRight = false;
 document.onkeydown = handleKeyDown;
 document.onkeyup = handleKeyUp;
 
+// All resources of we need load;
+var manifest;
+var assets = [];
+
+var superior;// Bg img to map;
+var inferior;// Bg img to map;
+
+
 function init() {
-    
+
     // Configure frame rate
 //    createjs.Ticker.useRAF = true;
 //    createjs.Ticker.setFPS(60);
@@ -66,28 +74,75 @@ function init() {
     // Cria o palco
     stage = new createjs.Stage(canvas);
 
-    messageField = new createjs.Text("Loading", "bold 24px Arial", "#000");
+
+    manifest = [
+        {src: "assets/Bird.png", id: "bird"},
+        {src: "assets/Bomb.png", id: "bomb"},
+        {src: "assets/fase_1_inferior.png", id: "faseSuperior"},
+        {src: "assets/fase_1_superior.png", id: "faseInferior"},
+        {src: "assets/guia.png", id: "guia"},
+        {src: "assets/person-1.png", id: "person1"},
+        {src: "assets/person-2.png", id: "person2"},
+        {src: "assets/person-4.png", id: "person4"},
+        {src: "assets/person-5.png", id: "person5"},
+        {src: "assets/person-6.png", id: "person6"},
+        {src: "assets/person-7.png", id: "person7"},
+        {src: "assets/person-8.png", id: "person8"},
+        {src: "assets/person-moves3.png", id: "person3"}
+    ];
+
+    messageField = new createjs.Text("Loading 0/"+manifest.length, "bold 24px Arial", "#000");
 
     messageField.maxWidth = 1000;
     messageField.textAlign = "center";
     messageField.x = canvas.width / 2;
     messageField.y = canvas.height / 2;
     stage.addChild(messageField);
+
     stage.update();     //update the stage to show text
-
-    scoreField = new createjs.Text("0", "bold 12px Arial", "#FFFFFF");
-    scoreField.textAlign = "right";
-    scoreField.x = canvas.width - 10;
-    scoreField.y = 22;
-    scoreField.maxWidth = 1000;
-
-    messageField.text = "Welcome: Click to play";
-
+    
+    loader = new createjs.LoadQueue(false);
+    loader.onFileLoad = handleFileLoad;
+    loader.onComplete = handleComplete;
+    loader.loadManifest(manifest);
+    
     //watch for clicks
     stage.addChild(messageField);
-    stage.update();     //update the stage to show text
-    canvas.onclick = handleClick;
 
+    stage.update();     //update the stage to show text
+}
+
+function handleFileLoad(event) {
+    assets.push(event.item);
+    messageField.text = "Loading "+assets.length+"/"+manifest.length;
+    stage.update();
+}
+
+function handleComplete() {
+    
+    for (i in assets) {
+        
+        var item = assets[i];
+        var id = item.id;
+        var result = loader.getResult(id);
+        
+        if (item.type == createjs.LoadQueue.IMAGE) {
+            var bmp = new createjs.Bitmap(result);
+        }
+        
+        switch (id) {
+            case "faseInferior":
+                inferior = new createjs.Shape(new createjs.Graphics().beginBitmapFill(result).drawRect(0, 0, 3600, 2400));
+                break;
+            case "faseSuperior":
+                superior = new createjs.Shape(new createjs.Graphics().beginBitmapFill(result).drawRect(0, 0, 3600, 2400));
+                break;
+        }
+    }
+    
+    canvas.onclick = handleClick;
+    messageField.text = "Welcome: Click to play";
+    stage.update();
 }
 
 function handleClick(event) {
@@ -97,8 +152,7 @@ function handleClick(event) {
 
     //hide anything on stage and show the score
     stage.removeAllChildren();
-    scoreField.text = (0).toString();
-    stage.addChild(scoreField);
+    
 
     //create the player
     playing = true;
@@ -111,6 +165,7 @@ function handleClick(event) {
     map = new Map();
     map.x = 0;
     map.y = 0;
+    map.addChild(inferior)
 
     //creating persons
     persons = new Array();
@@ -118,22 +173,17 @@ function handleClick(event) {
     var min = 4;
     var randomicPerson;
     for (var i = 0; i < 5; i++) {
-    	randomicPerson = (Math.floor(Math.random() * (max - min + 1)) + min);
-        person = new Person("assets/person-"+randomicPerson+".png");
+        randomicPerson = (Math.floor(Math.random() * (max - min + 1)) + min);
+        person = new Person("assets/person-" + randomicPerson + ".png");
         person.x = (canvas.width / 2) + (i * 95);
-        person.y = (canvas.height / 2)+(i*125) ;
+        person.y = (canvas.height / 2) + (i * 125);
 
         persons.push(person);
 
         //Adicionar person ao container ao inv�s de map
         map.addChild(person, ObjectMode.ELEMENT);
     }
-
-    //criar linha como algo abaixo
-    //Trazer o new map l� de cima
-    //map.addChild(container)
-
-
+    
     stage.clear();
 
     velocityField = new createjs.Text("X:0 Y:0", "bold 14px Arial", "#000");
@@ -145,6 +195,9 @@ function handleClick(event) {
     stage.addChild(bird);
 
     stage.addChild(velocityField);
+
+    map.addChild(superior)
+
     stage.update();
 
 
@@ -248,8 +301,8 @@ function checkBirdMovements() {
     map.y = map.y + map.velocityY;
     map.x = map.x + map.velocityX;
 
-    velocityField.text = "Bird: VX:" + (map.velocityX * -1) + "  VY:" + (map.velocityY * -1) +"\n";
-    velocityField.text = velocityField.text+"Map: X:" + map.x  + "  Y:" + map.y ;
+    velocityField.text = "Bird: VX:" + (map.velocityX * -1) + "  VY:" + (map.velocityY * -1) + "\n";
+    velocityField.text = velocityField.text + "Map: X:" + map.x + "  Y:" + map.y;
     bird.tick();
 
 }
@@ -331,10 +384,10 @@ function handleKeyUp(e) {
 
         case KEYCODE_Q:
             if (bird.isFlying &&
-                    ((map.velocityX > 0 && map.velocityX <= Map.MINIMUN_VELOCITY)
-                            || (map.velocityX < 0 && (map.velocityX * -1) <= Map.MINIMUN_VELOCITY)) &&
-                    ((map.velocityY > 0 && map.velocityY <= Map.MINIMUN_VELOCITY) ||
-                            (map.velocityY < 0 && (map.velocityY * -1) <= Map.MINIMUN_VELOCITY))
+                    ((map.velocityX >= 0 && map.velocityX <= Map.MINIMUN_VELOCITY)
+                            || (map.velocityX <= 0 && (map.velocityX * -1) <= Map.MINIMUN_VELOCITY)) &&
+                    ((map.velocityY >= 0 && map.velocityY <= Map.MINIMUN_VELOCITY) ||
+                            (map.velocityY <= 0 && (map.velocityY * -1) <= Map.MINIMUN_VELOCITY))
                     ) {
                 bird.isFlying = false;
                 map.velocityX = 0;

@@ -188,10 +188,10 @@
                 map.removeChild(this);
             } else if (mode == ObjectMode.ELEMENT) {
                 this.setRandomDirection();
-                console.log("This Person ("+this.id+") has encontered another Person ("+obj.id+")");
+//                console.log("This Person ("+this.id+") has encontered another Person ("+obj.id+")");
             } else if (mode == ObjectMode.BLOCK) {
                 this.setRandomDirection();
-                console.log("This Person ("+this.id+") has encontered an Block");
+//                console.log("This Person ("+this.id+") has encontered an Block");
             }
         }
     };

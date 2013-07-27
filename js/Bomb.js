@@ -94,15 +94,12 @@
             if (this.decX === 0 && this.decY === 0) {
                 this.died = true;
             }
-
-//            console.log("This: " + this.current + "\tPos x:" + this.vX + "\ty:" + this.vY);
-
         }
     };
 
     p.setup = function() {
         // Pega a velocidade do mapa,  incrementa 15 %
-        // adiciona ao mapa a bomba
+        // adiciona ao mapa
         this.vX = (map.velocityX + map.velocityX * .15) * -1;
         this.vY = (map.velocityY + map.velocityY * .15) * -1;
 
