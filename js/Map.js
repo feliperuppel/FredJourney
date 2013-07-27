@@ -47,7 +47,6 @@
         
         if (typeof zOrder != 'undefined') {
             this.addChildAt(ob, zOrder);
-            console.log(zOrder);
         } else {
             this.parent_addChild(ob);
         }
