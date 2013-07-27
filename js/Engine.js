@@ -78,8 +78,8 @@ function init() {
     manifest = [
         {src: "assets/Bird.png", id: "bird"},
         {src: "assets/Bomb.png", id: "bomb"},
-        {src: "assets/fase_1_inferior.png", id: "faseSuperior"},
-        {src: "assets/fase_1_superior.png", id: "faseInferior"},
+        {src: "assets/fase_1_inferior.png", id: "faseInferior"},
+        {src: "assets/fase_1_superior.png", id: "faseSuperior"},
         {src: "assets/guia.png", id: "guia"},
         {src: "assets/person-1.png", id: "person1"},
         {src: "assets/person-2.png", id: "person2"},
@@ -91,7 +91,7 @@ function init() {
         {src: "assets/person-moves3.png", id: "person3"}
     ];
 
-    messageField = new createjs.Text("Loading 0/"+manifest.length, "bold 24px Arial", "#000");
+    messageField = new createjs.Text("Loading 0/" + manifest.length, "bold 24px Arial", "#000");
 
     messageField.maxWidth = 1000;
     messageField.textAlign = "center";
@@ -100,12 +100,12 @@ function init() {
     stage.addChild(messageField);
 
     stage.update();     //update the stage to show text
-    
+
     loader = new createjs.LoadQueue(false);
     loader.onFileLoad = handleFileLoad;
     loader.onComplete = handleComplete;
     loader.loadManifest(manifest);
-    
+
     //watch for clicks
     stage.addChild(messageField);
 
@@ -114,22 +114,22 @@ function init() {
 
 function handleFileLoad(event) {
     assets.push(event.item);
-    messageField.text = "Loading "+assets.length+"/"+manifest.length;
+    messageField.text = "Loading " + assets.length + "/" + manifest.length;
     stage.update();
 }
 
 function handleComplete() {
-    
+
     for (i in assets) {
-        
+
         var item = assets[i];
         var id = item.id;
         var result = loader.getResult(id);
-        
+
         if (item.type == createjs.LoadQueue.IMAGE) {
             var bmp = new createjs.Bitmap(result);
         }
-        
+
         switch (id) {
             case "faseInferior":
                 inferior = new createjs.Shape(new createjs.Graphics().beginBitmapFill(result).drawRect(0, 0, 3600, 2400));
@@ -139,7 +139,7 @@ function handleComplete() {
                 break;
         }
     }
-    
+
     canvas.onclick = handleClick;
     messageField.text = "Welcome: Click to play";
     stage.update();
@@ -152,7 +152,7 @@ function handleClick(event) {
 
     //hide anything on stage and show the score
     stage.removeAllChildren();
-    
+
 
     //create the player
     playing = true;
@@ -165,13 +165,17 @@ function handleClick(event) {
     map = new Map();
     map.x = 0;
     map.y = 0;
-    map.addChild(inferior)
+
+    map.addChild(inferior, ObjectMode.IGNORE, 0)
 
     //creating persons
     persons = new Array();
     var max = 8;
     var min = 4;
     var randomicPerson;
+    
+    var lastChildren;
+    
     for (var i = 0; i < 5; i++) {
         randomicPerson = (Math.floor(Math.random() * (max - min + 1)) + min);
         person = new Person("assets/person-" + randomicPerson + ".png");
@@ -182,8 +186,10 @@ function handleClick(event) {
 
         //Adicionar person ao container ao inv�s de map
         map.addChild(person, ObjectMode.ELEMENT);
+        
+        lastChildren = person;
     }
-    
+
     stage.clear();
 
     velocityField = new createjs.Text("X:0 Y:0", "bold 14px Arial", "#000");
@@ -196,10 +202,9 @@ function handleClick(event) {
 
     stage.addChild(velocityField);
 
-    map.addChild(superior)
+    map.addChild(superior, ObjectMode.IGNORE, map.getChildIndex(lastChildren));
 
     stage.update();
-
 
     //start game timer   
     if (!createjs.Ticker.hasEventListener("tick")) {
@@ -262,7 +267,6 @@ function checkBirdMovements() {
                 map.velocityY++;
             }
         }
-
 
         if (movingLeft) {
             if (map.velocityX < 0) {

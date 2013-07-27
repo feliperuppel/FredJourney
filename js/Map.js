@@ -31,21 +31,26 @@
     Map.NORMAL_VELOCITY = 5;
 
     Map.MINIMUN_VELOCITY = 2;
-    
+
     // public methods:
     p.initialize = function() {
         this.ContainerInitializer();
     };
-    
-    p.addChild = function(ob, mode) {
+
+    p.addChild = function(ob, mode, zOrder) {
 
         if (typeof mode === 'undefined') {
             mode = ObjectMode.IGNORE;
             console.log("Object add without mode, it will logged in next line \\/");
             console.log(ob)
         }
-
-        this.parent_addChild(ob);
+        
+        if (typeof zOrder != 'undefined') {
+            this.addChildAt(ob, zOrder);
+            console.log(zOrder);
+        } else {
+            this.parent_addChild(ob);
+        }
 
         if (mode === ObjectMode.BLOCK || mode === ObjectMode.BOMB ||
                 mode === ObjectMode.ELEMENT) {
