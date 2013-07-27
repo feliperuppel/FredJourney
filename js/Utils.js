@@ -1,4 +1,5 @@
 var Utils = {};
+
 Utils.testHit = function(a, b) {
 
     if (!a.hitAreaX) {
@@ -95,6 +96,8 @@ Utils.testHit = function(a, b) {
             && a.blockArea.a.y >= b.blockArea.a.y && a.blockArea.a.y <= b.blockArea.d.y) {
         r.blocked = true;
     }
+    
+    // Check if is blocked by map
     
     if(!r.hited && !r.blocked){
         return false;
