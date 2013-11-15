@@ -43,17 +43,26 @@ var superior;// Bg img to map;
 var inferior;// Bg img to map;
 
 
-function init() {
+// Ensure log is avaliable
+if (!console || !console.log) {
+    var console = {}
+        console.log = function(a){
+    }
+}
 
+function init() {
     // Configure frame rate
 //    createjs.Ticker.useRAF = true;
 //    createjs.Ticker.setFPS(60);
-
-    // Checa se há plugin de som disponível
-    if (!createjs.Sound.initializeDefaultPlugins()) {
-        alert("Falha ao iniciar o som");
-        document.getElementById("content").style.display = "none";
-        return;
+    try {
+        // Checa se há plugin de som disponível
+        if (!createjs.Sound.initializeDefaultPlugins()) {
+            alert("Falha ao iniciar o som");
+            document.getElementById("content").style.display = "none";
+            return;
+        }
+    } catch (e) {
+        console.log(e);
     }
 
     // Checa o borwser.
@@ -146,11 +155,11 @@ function handleComplete() {
 }
 
 function handleClick(event) {
-    //prevent extra clicks and hide text
+    // Prevent extra clicks and hide text
     canvas.onclick = null;
     stage.removeChild(messageField);
 
-    //hide anything on stage and show the score
+    // Hide anything on stage and show the score
     stage.removeAllChildren();
 
 
@@ -161,7 +170,7 @@ function handleClick(event) {
     bird.y = canvas.height / 2;
 
 
-    // Criar container ao in�s de de MAP
+    // Criar container ao invés de de MAP
     map = new Map();
     map.x = 0;
     map.y = 0;
@@ -173,9 +182,9 @@ function handleClick(event) {
     var max = 8;
     var min = 4;
     var randomicPerson;
-    
+
     var lastChildren;
-    
+
     for (var i = 0; i < 5; i++) {
         randomicPerson = (Math.floor(Math.random() * (max - min + 1)) + min);
         person = new Person("assets/person-" + randomicPerson + ".png");
@@ -186,7 +195,7 @@ function handleClick(event) {
 
         //Adicionar person ao container ao inv�s de map
         map.addChild(person, ObjectMode.ELEMENT);
-        
+
         lastChildren = person;
     }
 

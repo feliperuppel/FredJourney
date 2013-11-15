@@ -44,7 +44,7 @@
             console.log("Object add without mode, it will logged in next line \\/");
             console.log(ob)
         }
-        
+
         if (typeof zOrder != 'undefined') {
             this.addChildAt(ob, zOrder);
         } else {
@@ -85,23 +85,25 @@
 
                     // O object é do tipo Element (Pessoa)? 
                     if (modes[y] === ObjectMode.ELEMENT && c !== curObject) {
-                        // O objeto está preparado para receber impacto?
 
+                        // O objeto está preparado para receber impacto?
                         if (!c.impact) {
 
                             // Não ignora, mas gera o erro
                             console.log("Object not suport impact " + (curObject.name || typeof curObject) + " (found an object without impact method)");
 
                         } else {
+                            try {
+                                // Sim, testa o hit
+                                if (Utils.testHit(curObject, c)) {
 
-                            // Sim, testa o hit
-                            if (Utils.testHit(curObject, c)) {
+                                    // Foi hitado, notifica o objeto
+                                    c.impact(curObject, mode);
 
-                                // Foi hitado, notifica o objeto
-                                c.impact(curObject, mode);
-
+                                }
+                            } catch (e) {
+                                console.log(e);
                             }
-
                         }
                     }
                 }
