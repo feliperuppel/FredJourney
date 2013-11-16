@@ -94,7 +94,7 @@
             
             var bomb = new Bomb();
             
-            map.addChild(bomb, ObjectMode.BOMB);
+            Game.map.addChild(bomb, ObjectMode.BOMB);
             
             bomb.setup();
 
@@ -109,71 +109,71 @@
         var newAnimation;
 
         //Going up?
-        if (map.velocityY > 0) {
+        if (Game.map.velocityY > 0) {
             // Yes
             // Going left?
-            if (map.velocityX > 0) {
+            if (Game.map.velocityX > 0) {
                 // Yes
                 // Check diagonal
-                if (this.isApproximate(map.velocityX, map.velocityY)) {
+                if (this.isApproximate(Game.map.velocityX, Game.map.velocityY)) {
                     // In diagonal
                     newAnimation = "up_l";
-                    bird.currentDirection = Bird.UP_LEFT;
-                } else if (map.velocityY > map.velocityX) {
+                    Game.bird.currentDirection = Bird.UP_LEFT;
+                } else if (Game.map.velocityY > Game.map.velocityX) {
                     // Not in diagonal
                     newAnimation = "up";
-                    bird.currentDirection = Bird.UP;
+                    Game.bird.currentDirection = Bird.UP;
                 } else {
                     // Not in diagonal
                     newAnimation = "left";
-                    bird.currentDirection = Bird.LEFT;
+                    Game.bird.currentDirection = Bird.LEFT;
                 }
             } else {// Not going left
-                if (this.isApproximate(map.velocityX, map.velocityY)) {
+                if (this.isApproximate(Game.map.velocityX, Game.map.velocityY)) {
                     // In diagonal
                     newAnimation = "up_r";
-                    bird.currentDirection = Bird.UP_RIGHT;
-                } else if (map.velocityY > (map.velocityX * -1)) {
+                    Game.bird.currentDirection = Bird.UP_RIGHT;
+                } else if (Game.map.velocityY > (Game.map.velocityX * -1)) {
                     // Not in diagonal  
                     newAnimation = "up";
-                    bird.currentDirection = Bird.UP;
+                    Game.bird.currentDirection = Bird.UP;
                 } else {
                     // Not in diagonal
                     newAnimation = "right";
-                    bird.currentDirection = Bird.RIGHT;
+                    Game.bird.currentDirection = Bird.RIGHT;
                 }
             }
         } else { // Not going up
             // Going left?
-            if (map.velocityX > 0) {
+            if (Game.map.velocityX > 0) {
                 // Yes
                 // Check diagonal
-                if (this.isApproximate(map.velocityX, map.velocityY)) {
+                if (this.isApproximate(Game.map.velocityX, Game.map.velocityY)) {
                     // In diagonal
                     newAnimation = "down_l";
-                    bird.currentDirection = Bird.DOWN_LEFT;
-                } else if (map.velocityY * -1 > map.velocityX) {
+                    Game.bird.currentDirection = Bird.DOWN_LEFT;
+                } else if (Game.map.velocityY * -1 > Game.map.velocityX) {
                     // Not in diagonal
                     newAnimation = "down";
-                    bird.currentDirection = Bird.DOWN;
+                    Game.bird.currentDirection = Bird.DOWN;
                 } else {
                     // Not in diagonal
                     newAnimation = "left";
-                    bird.currentDirection = Bird.LEFT;
+                    Game.bird.currentDirection = Bird.LEFT;
                 }
             } else {// Not going left
-                if (this.isApproximate(map.velocityX, map.velocityY)) {
+                if (this.isApproximate(Game.map.velocityX, Game.map.velocityY)) {
                     // In diagonal
                     newAnimation = "down_r";
-                    bird.currentDirection = Bird.DOWN_RIGHT;
-                } else if (map.velocityY < map.velocityX) {
+                    Game.bird.currentDirection = Bird.DOWN_RIGHT;
+                } else if (Game.map.velocityY < Game.map.velocityX) {
                     // Not in diagonal
                     newAnimation = "down";
-                    bird.currentDirection = Bird.DOWN;
+                    Game.bird.currentDirection = Bird.DOWN;
                 } else {
                     // Not in diagonal
                     newAnimation = "right";
-                    bird.currentDirection = Bird.RIGHT;
+                    Game.bird.currentDirection = Bird.RIGHT;
                 }
             }
         }

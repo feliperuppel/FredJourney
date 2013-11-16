@@ -35,10 +35,6 @@ var movingRight = false;
 document.onkeydown = handleKeyDown;
 document.onkeyup = handleKeyUp;
 
-// All resources of we need load;
-var manifest;
-var assets = [];
-
 var superior;// Bg img to map;
 var inferior;// Bg img to map;
 
@@ -83,34 +79,20 @@ function init() {
     // Cria o palco
     stage = new createjs.Stage(canvas);
 
-
-    manifest = [
-        {src: "assets/Bird.png", id: "bird"},
-        {src: "assets/Bomb.png", id: "bomb"},
-        {src: "assets/fase_1_inferior.png", id: "faseInferior"},
-        {src: "assets/fase_1_superior.png", id: "faseSuperior"},
-        {src: "assets/guia.png", id: "guia"}
-    ];
-
     messageField = new createjs.Text("Loading 0/" + manifest.length, "bold 24px Arial", "#000");
 
     messageField.maxWidth = 1000;
     messageField.textAlign = "center";
     messageField.x = canvas.width / 2;
     messageField.y = canvas.height / 2;
-    stage.addChild(messageField);
-
-    stage.update();     //update the stage to show text
-
-    loader = new createjs.LoadQueue(false);
-    loader.onFileLoad = handleFileLoad;
-    loader.onComplete = handleComplete;
-    loader.loadManifest(manifest);
 
     //watch for clicks
     stage.addChild(messageField);
-
-    stage.update();     //update the stage to show text
+    
+    
+    canvas.onclick = handleClick;
+    messageField.text = "Welcome: Click to play";
+    stage.update();
 }
 
 function handleFileLoad(event) {
@@ -121,29 +103,6 @@ function handleFileLoad(event) {
 
 function handleComplete() {
 
-    for (i in assets) {
-
-        var item = assets[i];
-        var id = item.id;
-        var result = loader.getResult(id);
-
-        if (item.type == createjs.LoadQueue.IMAGE) {
-            var bmp = new createjs.Bitmap(result);
-        }
-
-        switch (id) {
-            case "faseInferior":
-                inferior = new createjs.Shape(new createjs.Graphics().beginBitmapFill(result).drawRect(0, 0, 3600, 2400));
-                break;
-            case "faseSuperior":
-                superior = new createjs.Shape(new createjs.Graphics().beginBitmapFill(result).drawRect(0, 0, 3600, 2400));
-                break;
-        }
-    }
-
-    canvas.onclick = handleClick;
-    messageField.text = "Welcome: Click to play";
-    stage.update();
 }
 
 function handleClick(event) {

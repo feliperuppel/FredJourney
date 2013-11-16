@@ -2,6 +2,9 @@
 
     function Map() {
         this.initialize();
+
+        this.x = 0;
+        this.y = 0;
     }
 
     var p = Map.prototype = new createjs.Container();
@@ -45,7 +48,7 @@
             console.log(ob)
         }
 
-        if (typeof zOrder != 'undefined') {
+        if (typeof zOrder !== 'undefined') {
             this.addChildAt(ob, zOrder);
         } else {
             this.parent_addChild(ob);
@@ -71,7 +74,6 @@
         for (i in childs) {
 
             // Executa um loop em todos os elementos
-
             var curObject = childs[i];
             var mode = modes[i];
 
@@ -121,7 +123,11 @@
         return pos;
 
     };
-
+    
+    p.getChilds = function(){
+        return childs;
+    };
+    
     window.Map = Map;
 }(window));
 

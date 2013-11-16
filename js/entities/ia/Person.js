@@ -185,7 +185,7 @@
             if (mode == ObjectMode.BOMB) {
                 this.active = false;
                 obj.active = false;
-                map.removeChild(this);
+                Game.map.removeChild(this);
             } else if (mode == ObjectMode.ELEMENT) {
                 this.setRandomDirection();
 //                console.log("This Person ("+this.id+") has encontered another Person ("+obj.id+")");

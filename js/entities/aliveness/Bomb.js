@@ -98,21 +98,21 @@
     p.setup = function() {
         // Pega a velocidade do mapa,  incrementa 15 %
         // adiciona ao mapa
-        this.vX = (map.velocityX + map.velocityX * .15) * -1;
-        this.vY = (map.velocityY + map.velocityY * .15) * -1;
+        this.vX = (Game.map.velocityX + Game.map.velocityX * .15) * -1;
+        this.vY = (Game.map.velocityY + Game.map.velocityY * .15) * -1;
 
 
         this.decX = this.vX * .1;
         this.decY = this.vY * .1;
 
-        var pos = map.getCenterPos();
+        var pos = Game.map.getCenterPos();
 
         this.x = pos.x;
         this.y = pos.y;
 
 //        console.log("Fire x:" + this.x + "\ty:" + this.y);
-//        console.log("Map x:" + map.x + "\ty:" + map.y);
-        switch (bird.currentDirection) {
+//        console.log("Map x:" + Game.map.x + "\ty:" + Game.map.y);
+        switch (Game.bird.currentDirection) {
 //            case Bird.RIGHT:
 //                this.gotoAndPlay("right");
 //                return false;

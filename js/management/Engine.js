@@ -3,15 +3,25 @@ var messageField;       //Message display field
 var velocityField;
 var scoreField;         //score Field
 var canvas;
-var stage;
 
-var playing = false;
-var bird;
-var map;
+
+
+
+var Game = {};
+Game.playing = false;
+Game.bird = new Bird();
+Game.stage = null;
+/**
+ * @type PhaseManager
+ */
+Game.phaseManager;
+
 var person;
 var persons;
 
 var bombs = [];
+
+
 
 var KEYCODE_ENTER = 13;		//usefull keycode
 var KEYCODE_SPACE = 32;		//usefull keycode
@@ -35,18 +45,10 @@ var movingRight = false;
 document.onkeydown = handleKeyDown;
 document.onkeyup = handleKeyUp;
 
-// All resources of we need load;
-var manifest;
-var assets = [];
-
-var superior;// Bg img to map;
-var inferior;// Bg img to map;
-
-
 // Ensure log is avaliable
 if (!console || !console.log) {
     var console = {}
-        console.log = function(a){
+    console.log = function(a) {
     }
 }
 
@@ -81,139 +83,38 @@ function init() {
     }
 
     // Cria o palco
-    stage = new createjs.Stage(canvas);
+    Game.stage = new createjs.Stage(canvas);
 
-
-    manifest = [
-        {src: "assets/Bird.png", id: "bird"},
-        {src: "assets/Bomb.png", id: "bomb"},
-        {src: "assets/fase_1_inferior.png", id: "faseInferior"},
-        {src: "assets/fase_1_superior.png", id: "faseSuperior"},
-        {src: "assets/guia.png", id: "guia"},
-        {src: "assets/person-1.png", id: "person1"},
-        {src: "assets/person-2.png", id: "person2"},
-        {src: "assets/person-4.png", id: "person4"},
-        {src: "assets/person-5.png", id: "person5"},
-        {src: "assets/person-6.png", id: "person6"},
-        {src: "assets/person-7.png", id: "person7"},
-        {src: "assets/person-8.png", id: "person8"},
-        {src: "assets/person-moves3.png", id: "person3"}
-    ];
-
-    messageField = new createjs.Text("Loading 0/" + manifest.length, "bold 24px Arial", "#000");
+    messageField = new createjs.Text("Welcome: Click to play");
 
     messageField.maxWidth = 1000;
     messageField.textAlign = "center";
     messageField.x = canvas.width / 2;
     messageField.y = canvas.height / 2;
-    stage.addChild(messageField);
-
-    stage.update();     //update the stage to show text
-
-    loader = new createjs.LoadQueue(false);
-    loader.onFileLoad = handleFileLoad;
-    loader.onComplete = handleComplete;
-    loader.loadManifest(manifest);
-
     //watch for clicks
-    stage.addChild(messageField);
-
-    stage.update();     //update the stage to show text
-}
-
-function handleFileLoad(event) {
-    assets.push(event.item);
-    messageField.text = "Loading " + assets.length + "/" + manifest.length;
-    stage.update();
-}
-
-function handleComplete() {
-
-    for (i in assets) {
-
-        var item = assets[i];
-        var id = item.id;
-        var result = loader.getResult(id);
-
-        if (item.type == createjs.LoadQueue.IMAGE) {
-            var bmp = new createjs.Bitmap(result);
-        }
-
-        switch (id) {
-            case "faseInferior":
-                inferior = new createjs.Shape(new createjs.Graphics().beginBitmapFill(result).drawRect(0, 0, 3600, 2400));
-                break;
-            case "faseSuperior":
-                superior = new createjs.Shape(new createjs.Graphics().beginBitmapFill(result).drawRect(0, 0, 3600, 2400));
-                break;
-        }
-    }
+    Game.stage.addChild(messageField);
 
     canvas.onclick = handleClick;
-    messageField.text = "Welcome: Click to play";
-    stage.update();
+    Game.stage.update();
+
 }
 
 function handleClick(event) {
     // Prevent extra clicks and hide text
     canvas.onclick = null;
-    stage.removeChild(messageField);
+    Game.stage.removeChild(messageField);
 
     // Hide anything on stage and show the score
-    stage.removeAllChildren();
-
+    Game.stage.removeAllChildren();
 
     //create the player
-    playing = true;
-    bird = new Bird();
-    bird.x = canvas.width / 2;
-    bird.y = canvas.height / 2;
+    // Criar Map
+    Game.map = new Map();
 
+    // Cria o gerenciador de fases
+    Game.phaseManager = new PhaseManager(Game.map);
 
-    // Criar container ao invés de de MAP
-    map = new Map();
-    map.x = 0;
-    map.y = 0;
-
-    map.addChild(inferior, ObjectMode.IGNORE, 0)
-
-    //creating persons
-    persons = new Array();
-    var max = 8;
-    var min = 4;
-    var randomicPerson;
-
-    var lastChildren;
-
-    for (var i = 0; i < 5; i++) {
-        randomicPerson = (Math.floor(Math.random() * (max - min + 1)) + min);
-        person = new Person("assets/person-" + randomicPerson + ".png");
-        person.x = 0 + (i * 80);
-        person.y = 0 + (i * 120)
-
-        persons.push(person);
-
-        //Adicionar person ao container ao inv�s de map
-        map.addChild(person, ObjectMode.ELEMENT);
-
-        lastChildren = person;
-    }
-
-    stage.clear();
-
-    velocityField = new createjs.Text("X:0 Y:0", "bold 14px Arial", "#000");
-    velocityField.textAlign = "right";
-    velocityField.x = canvas.width - 100;
-    velocityField.y = 22;
-
-    stage.addChild(map);
-    stage.addChild(bird);
-
-    stage.addChild(velocityField);
-
-//    map.addChild(superior, ObjectMode.IGNORE, map.getChildIndex(lastChildren));
-
-    stage.update();
+    Game.phaseManager.load(new PhaseTest(), new PhaseObjective());
 
     //start game timer   
     if (!createjs.Ticker.hasEventListener("tick")) {
@@ -226,8 +127,8 @@ function tick() {
     checkBirdMovements();
     movePersons();
     checkFire();
-    map.tick();
-    stage.update();
+    Game.phaseManager.tick()
+    Game.stage.update();
 }
 
 function movePersons() {
@@ -244,174 +145,174 @@ function checkFire() {
 
 function checkBirdMovements() {
 
-    if (bird.isFlying) {
+    if (Game.bird.isFlying) {
         if (movingUp) {
-            if (map.velocityY < 0) {
-                if ((map.velocityY * -1) > Map.MINIMUN_VELOCITY) {
-                    map.velocityY++;
-                } else if (map.velocityX >= Map.SWAP_VELOCITY || (map.velocityX * -1) >= Map.SWAP_VELOCITY) {
-                    map.velocityY++;
+            if (Game.map.velocityY < 0) {
+                if ((Game.map.velocityY * -1) > Map.MINIMUN_VELOCITY) {
+                    Game.map.velocityY++;
+                } else if (Game.map.velocityX >= Map.SWAP_VELOCITY || (Game.map.velocityX * -1) >= Map.SWAP_VELOCITY) {
+                    Game.map.velocityY++;
                 }
-            } else if (map.velocityY < Map.MAX_VELOCITY) {
-                map.velocityY++;
+            } else if (Game.map.velocityY < Map.MAX_VELOCITY) {
+                Game.map.velocityY++;
             }
         } else {
-            if (map.velocityY > Map.NORMAL_VELOCITY) {
-                map.velocityY--;
+            if (Game.map.velocityY > Map.NORMAL_VELOCITY) {
+                Game.map.velocityY--;
             }
         }
 
         if (movingDown) {
-            if (map.velocityY > 0) {
-                if (map.velocityY > Map.MINIMUN_VELOCITY) {
-                    map.velocityY--;
-                } else if (map.velocityX >= Map.SWAP_VELOCITY || (map.velocityX * -1) >= Map.SWAP_VELOCITY) {
-                    map.velocityY--;
+            if (Game.map.velocityY > 0) {
+                if (Game.map.velocityY > Map.MINIMUN_VELOCITY) {
+                    Game.map.velocityY--;
+                } else if (Game.map.velocityX >= Map.SWAP_VELOCITY || (Game.map.velocityX * -1) >= Map.SWAP_VELOCITY) {
+                    Game.map.velocityY--;
                 }
-            } else if ((map.velocityY * -1) < Map.MAX_VELOCITY) {
-                map.velocityY--;
+            } else if ((Game.map.velocityY * -1) < Map.MAX_VELOCITY) {
+                Game.map.velocityY--;
             }
         } else {
-            if ((map.velocityY * -1) > Map.NORMAL_VELOCITY) {
-                map.velocityY++;
+            if ((Game.map.velocityY * -1) > Map.NORMAL_VELOCITY) {
+                Game.map.velocityY++;
             }
         }
 
         if (movingLeft) {
-            if (map.velocityX < 0) {
-                if ((map.velocityX * -1) > Map.MINIMUN_VELOCITY) {
-                    map.velocityX++;
-                } else if (map.velocityY >= Map.SWAP_VELOCITY || (map.velocityY * -1) >= Map.SWAP_VELOCITY) {
-                    map.velocityX++;
+            if (Game.map.velocityX < 0) {
+                if ((Game.map.velocityX * -1) > Map.MINIMUN_VELOCITY) {
+                    Game.map.velocityX++;
+                } else if (Game.map.velocityY >= Map.SWAP_VELOCITY || (Game.map.velocityY * -1) >= Map.SWAP_VELOCITY) {
+                    Game.map.velocityX++;
                 }
-            } else if (map.velocityX < Map.MAX_VELOCITY) {
-                map.velocityX++;
+            } else if (Game.map.velocityX < Map.MAX_VELOCITY) {
+                Game.map.velocityX++;
             }
         } else {
-            if (map.velocityX > Map.NORMAL_VELOCITY) {
-                map.velocityX--;
+            if (Game.map.velocityX > Map.NORMAL_VELOCITY) {
+                Game.map.velocityX--;
             }
         }
 
         if (movingRight) {
-            if (map.velocityX > 0) {
-                if (map.velocityX > Map.MINIMUN_VELOCITY) {
-                    map.velocityX--;
-                } else if (map.velocityY >= Map.SWAP_VELOCITY || (map.velocityY * -1) >= Map.SWAP_VELOCITY) {
-                    map.velocityX--;
+            if (Game.map.velocityX > 0) {
+                if (Game.map.velocityX > Map.MINIMUN_VELOCITY) {
+                    Game.map.velocityX--;
+                } else if (Game.map.velocityY >= Map.SWAP_VELOCITY || (Game.map.velocityY * -1) >= Map.SWAP_VELOCITY) {
+                    Game.map.velocityX--;
                 }
-            } else if ((map.velocityX * -1) < Map.MAX_VELOCITY) {
-                map.velocityX = map.velocityX - 1;
+            } else if ((Game.map.velocityX * -1) < Map.MAX_VELOCITY) {
+                Game.map.velocityX = Game.map.velocityX - 1;
             }
         }
         else {
-            if ((map.velocityX * -1) > Map.NORMAL_VELOCITY) {
-                map.velocityX++;
+            if ((Game.map.velocityX * -1) > Map.NORMAL_VELOCITY) {
+                Game.map.velocityX++;
             }
         }
     }
 
-    map.y = map.y + map.velocityY;
-    map.x = map.x + map.velocityX;
-
-    velocityField.text = "Bird: VX:" + (map.velocityX * -1) + "  VY:" + (map.velocityY * -1) + "\n";
-    velocityField.text = velocityField.text + "Map: X:" + map.x + "  Y:" + map.y;
-    bird.tick();
+    Game.map.y = Game.map.y + Game.map.velocityY;
+    Game.map.x = Game.map.x + Game.map.velocityX;
 
 }
 
 //allow for WASD and arrow control scheme
 function handleKeyDown(e) {
-    //cross browser issues exist
-    if (!e) {
+    if (Game.playing) {
+        //cross browser issues exist
+        if (!e) {
 //        var e = window.event;
-        e = window.event;
-    }
+            e = window.event;
+        }
 
-    switch (e.keyCode) {
-        case KEYCODE_A:
-        case KEYCODE_LEFT:
-            movingLeft = true;
-            return false;
+        switch (e.keyCode) {
+            case KEYCODE_A:
+            case KEYCODE_LEFT:
+                movingLeft = true;
+                return false;
 
-        case KEYCODE_D:
-        case KEYCODE_RIGHT:
-            movingRight = true;
-            return false;
+            case KEYCODE_D:
+            case KEYCODE_RIGHT:
+                movingRight = true;
+                return false;
 
-        case KEYCODE_W:
-        case KEYCODE_UP:
-            movingUp = true;
-            return false;
+            case KEYCODE_W:
+            case KEYCODE_UP:
+                movingUp = true;
+                return false;
 
-        case KEYCODE_S:
-        case KEYCODE_DOWN:
-            movingDown = true;
-            return false;
+            case KEYCODE_S:
+            case KEYCODE_DOWN:
+                movingDown = true;
+                return false;
 
-        case KEYCODE_ENTER:
-            if (canvas.onclick == handleClick) {
-                handleClick();
-            }
-            return false;
+            case KEYCODE_ENTER:
+                if (canvas.onclick == handleClick) {
+                    handleClick();
+                }
+                return false;
+        }
     }
 }
 
 //allow for WASD and arrow control scheme
 function handleKeyUp(e) {
-    //cross browser issues exist
-    if (!e) {
+    if (Game.playing) {
+        //cross browser issues exist
+        if (!e) {
 //        var e = window.event;
-        e = window.event;
-    }
+            e = window.event;
+        }
 
-    switch (e.keyCode) {
+        switch (e.keyCode) {
 
-        case KEYCODE_A:
-        case KEYCODE_LEFT:
-            movingLeft = false;
-            return false;
+            case KEYCODE_A:
+            case KEYCODE_LEFT:
+                movingLeft = false;
+                return false;
 
-        case KEYCODE_D:
-        case KEYCODE_RIGHT:
-            movingRight = false;
-            return false;
+            case KEYCODE_D:
+            case KEYCODE_RIGHT:
+                movingRight = false;
+                return false;
 
-        case KEYCODE_W:
-        case KEYCODE_UP:
-            movingUp = false;
-            return false;
+            case KEYCODE_W:
+            case KEYCODE_UP:
+                movingUp = false;
+                return false;
 
-        case KEYCODE_S:
-        case KEYCODE_DOWN:
-            movingDown = false;
-            return false;
+            case KEYCODE_S:
+            case KEYCODE_DOWN:
+                movingDown = false;
+                return false;
 
-        case KEYCODE_ENTER:
+            case KEYCODE_ENTER:
 
-            if (canvas.onclick === handleClick) {
-                handleClick();
-            }
+                if (canvas.onclick === handleClick) {
+                    handleClick();
+                }
 
-            return false;
+                return false;
 
-        case KEYCODE_Q:
-            if (bird.isFlying &&
-                    ((map.velocityX >= 0 && map.velocityX <= Map.MINIMUN_VELOCITY)
-                            || (map.velocityX <= 0 && (map.velocityX * -1) <= Map.MINIMUN_VELOCITY)) &&
-                    ((map.velocityY >= 0 && map.velocityY <= Map.MINIMUN_VELOCITY) ||
-                            (map.velocityY <= 0 && (map.velocityY * -1) <= Map.MINIMUN_VELOCITY))
-                    ) {
-                bird.isFlying = false;
-                map.velocityX = 0;
-                map.velocityY = 0;
+            case KEYCODE_Q:
+                if (Game.bird.isFlying &&
+                        ((Game.map.velocityX >= 0 && Game.map.velocityX <= Map.MINIMUN_VELOCITY)
+                                || (Game.map.velocityX <= 0 && (Game.map.velocityX * -1) <= Map.MINIMUN_VELOCITY)) &&
+                        ((Game.map.velocityY >= 0 && Game.map.velocityY <= Map.MINIMUN_VELOCITY) ||
+                                (Game.map.velocityY <= 0 && (Game.map.velocityY * -1) <= Map.MINIMUN_VELOCITY))
+                        ) {
+                    Game.bird.isFlying = false;
+                    Game.map.velocityX = 0;
+                    Game.map.velocityY = 0;
 
-            } else {
-                bird.isFlying = true;
-            }
-            return false;
-        case KEYCODE_SPACE:
-            bird.fire();
-            return false;
+                } else {
+                    Game.bird.isFlying = true;
+                }
+                return false;
+            case KEYCODE_SPACE:
+                Game.bird.fire();
+                return false;
+        }
     }
 }
