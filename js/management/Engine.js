@@ -4,19 +4,8 @@ var velocityField;
 var scoreField;         //score Field
 var canvas;
 
-
-
-
-var Game = {};
-Game.playing = false;
-Game.bird = new Bird();
-Game.stage = null;
-/**
- * @type PhaseManager
- */
-Game.phaseManager;
-
-var KEYCODE_ENTER = 13;		//usefull keycode
+// Usefull keycode
+var KEYCODE_ENTER = 13;		//
 var KEYCODE_SPACE = 32;		//usefull keycode
 var KEYCODE_UP = 38;		//usefull keycode
 var KEYCODE_LEFT = 37;		//usefull keycode
@@ -59,25 +48,10 @@ function init() {
     } catch (e) {
         console.log(e);
     }
-
-    // Checa o borwser.
-    //if (createjs.Sound.BrowserDetect.isIOS || createjs.Sound.BrowserDetect.isAndroid) {  // || createjs.Sound.BrowserDetect.isBlackberry  OJR blackberry has not been tested yet
-    //document.getElementById("mobile").style.display = "block";
-    //document.getElementById("content").style.display = "none";
-    //return;
-    //}
-
-    // Pega o canvas
-    canvas = document.getElementById("gameCanvas");
-
-    if (canvas == null) {
-        alert("Falhou ao recuperar o elemento canvas!");
-        return;
-    }
-
-    // Cria o palco
-    Game.stage = new createjs.Stage(canvas);
-
+    
+    // Inicializa controles do Jogo
+    Game.setup();
+    
     messageField = new createjs.Text("Welcome: Click to play");
 
     messageField.maxWidth = 1000;
@@ -91,10 +65,10 @@ function init() {
     Game.stage.update();
 
 }
-
+stage.enableMouseOver(10);
 function handleClick(event) {
     // Prevent extra clicks and hide text
-    canvas.onclick = null;
+    Game.canvas.onclick = null;
     Game.stage.removeChild(messageField);
 
     // Hide anything on stage and show the score
@@ -103,10 +77,9 @@ function handleClick(event) {
     //create the player
     // Criar Map
     Game.map = new Map();
-
-    // Cria o gerenciador de fases
-    Game.phaseManager = new PhaseManager(Game.map);
-
+    
+    Game.stage.enableMouseOver(10);
+    
     Game.phaseManager.load(new PhaseTest(), new PhaseObjective());
 
     //start game timer   

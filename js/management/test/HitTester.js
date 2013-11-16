@@ -2,26 +2,6 @@
 var messageField;       //Message display field
 var velocityField;
 var scoreField;         //score Field
-var canvas;
-
-
-
-
-var Game = {};
-Game.playing = false;
-Game.bird = new Bird();
-Game.stage = null;
-/**
- * @type PhaseManager
- */
-Game.phaseManager;
-
-var person;
-var persons;
-
-var bombs = [];
-
-
 
 var KEYCODE_ENTER = 13;		//usefull keycode
 var KEYCODE_SPACE = 32;		//usefull keycode
@@ -47,15 +27,16 @@ document.onkeyup = handleKeyUp;
 
 // Ensure log is avaliable
 if (!console || !console.log) {
-    var console = {}
-    console.log = function(a) {
-    }
+    var console = {};
+    console.log = function(a) {};
 }
 
 function init() {
     // Configure frame rate
 //    createjs.Ticker.useRAF = true;
 //    createjs.Ticker.setFPS(60);
+    Game.setup();
+
     try {
         // Checa se há plugin de som disponível
         if (!createjs.Sound.initializeDefaultPlugins()) {
@@ -74,17 +55,6 @@ function init() {
     //return;
     //}
 
-    // Pega o canvas
-    canvas = document.getElementById("gameCanvas");
-
-    if (canvas === null) {
-        alert("Falhou ao recuperar o elemento canvas!");
-        return;
-    }
-
-    // Cria o palco
-    Game.stage = new createjs.Stage(canvas);
-
     messageField = new createjs.Text("Welcome: Click to play");
 
     messageField.maxWidth = 1000;
@@ -94,14 +64,14 @@ function init() {
     //watch for clicks
     Game.stage.addChild(messageField);
 
-    canvas.onclick = handleClick;
+    Game.canvas.onclick = handleClick;
     Game.stage.update();
 
 }
 
 function handleClick(event) {
     // Prevent extra clicks and hide text
-    canvas.onclick = null;
+    Game.canvas.onclick = null;
     Game.stage.removeChild(messageField);
 
     // Hide anything on stage and show the score
