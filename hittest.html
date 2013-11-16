@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Fred Journey</title>
+
+
+<script type="text/javascript" src="assets/preloadjs-NEXT.min.js"></script>
+<script type="text/javascript" src="assets/soundjs-NEXT.min.js"></script>
+<script type="text/javascript" src="js/collision/CollisionUtil.js"></script>
+<script type="text/javascript" src="js/ObjectMode.js"></script>
+
+<script type="text/javascript" src="js/EaselJS/utils/UID.js"></script>
+<script type="text/javascript" src="js/EaselJS/geom/Matrix2D.js"></script>
+<script type="text/javascript" src="js/EaselJS/geom/Rectangle.js"></script>
+<script type="text/javascript" src="js/EaselJS/events/EventDispatcher.js"></script>
+<script type="text/javascript" src="js/EaselJS/display/DisplayObject.js"></script>
+<script type="text/javascript" src="js/EaselJS/display/Container.js"></script>
+<script type="text/javascript" src="js/EaselJS/display/Stage.js"></script>
+<script type="text/javascript" src="js/EaselJS/events/MouseEvent.js"></script>
+<script type="text/javascript" src="js/EaselJS/display/Shape.js"></script>
+<script type="text/javascript" src="js/EaselJS/display/Bitmap.js"></script>
+<script type="text/javascript" src="js/EaselJS/display/Graphics.js"></script>
+<script type="text/javascript" src="js/EaselJS/utils/Ticker.js"></script>
+<script type="text/javascript" src="js/EaselJS/display/Text.js"></script>
+<script type="text/javascript" src="js/EaselJS/display/BitmapAnimation.js"></script>
+<script type="text/javascript" src="js/EaselJS/display/SpriteSheet.js"></script>
+<script type="text/javascript" src="js/EaselJS/utils/SpriteSheetUtils.js"></script>
+
+<!-- We also provide hosted minified versions of all CreateJS libraries.
+            http://code.createjs.com -->
+
+<!-- Game script below -->
+<script type="text/javascript" src="js/entities/aliveness/Bomb.js"></script>
+<script type="text/javascript" src="js/entities/managed/Bird.js"></script>
+<script type="text/javascript" src="js/entities/ia/Circle.js"></script>
+<script type="text/javascript" src="js/management/Map.js"></script>
+<script type="text/javascript" src="js/management/util/ObjectMode.js"></script>
+<script type="text/javascript" src="js/management/HitTester.js"></script>
+
+<style type="text/css" media="screen">
+canvas {
+	border: 2px solid #666;
+	box-shadow: 3px 3px 3px #888;
+}
+</style>
+<body onload="init();">
+
+	<header id="header"> Fred Journey </header>
+
+	<div id="content" style="width: 960px; height: 400px; margin: auto">
+		<canvas id="gameCanvas" width="960" height="400">Sorry, your browser do not have support to canvas!</canvas>
+	</div>
+</body>

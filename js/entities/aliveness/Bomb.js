@@ -16,8 +16,6 @@
     p.decX;
     p.decY;
 
-    p.died = false;
-
     p.current;
 
     /**
@@ -68,7 +66,7 @@
 
     p.tick = function(event) {
 
-        if (!this.died) {
+        if (this.active) {
 
             if (this.timeout === 0) {
 
@@ -92,7 +90,7 @@
             }
 
             if (this.decX === 0 && this.decY === 0) {
-                this.died = true;
+                this.active = false;
             }
         }
     };
