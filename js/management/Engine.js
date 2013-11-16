@@ -188,8 +188,8 @@ function handleClick(event) {
     for (var i = 0; i < 5; i++) {
         randomicPerson = (Math.floor(Math.random() * (max - min + 1)) + min);
         person = new Person("assets/person-" + randomicPerson + ".png");
-        person.x = (canvas.width / 2) + (i * 95);
-        person.y = (canvas.height / 2) + (i * 125);
+        person.x = 0 + (i * 80);
+        person.y = 0 + (i * 120)
 
         persons.push(person);
 
@@ -211,7 +211,7 @@ function handleClick(event) {
 
     stage.addChild(velocityField);
 
-    map.addChild(superior, ObjectMode.IGNORE, map.getChildIndex(lastChildren));
+//    map.addChild(superior, ObjectMode.IGNORE, map.getChildIndex(lastChildren));
 
     stage.update();
 

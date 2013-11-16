@@ -40,10 +40,6 @@ CollisionUtil.checkArea = function(a) {
         a.hitAreaY = a.height;
     }
 
-    a.centerX = a.x + (a.hitAreaX / 2);
-
-    a.centerY = a.y + (a.hitAreaY / 2);
-
     if (!a.radius) {
         console.log("Hit!-------------------------------------------------------");
         console.warn("Object: {" + a + "} without radius");
@@ -56,9 +52,9 @@ CollisionUtil.checkRectCollision = function(a, b) {
     var h;
     var w;
 
-    h = b.centerY - a.centerY;
+    h = b.y - a.y;
 
-    w = b.centerX - a.centerX;
+    w = b.x - a.x;
 
     var d = Math.sqrt((h * h) + (w * w));
     var hit = (d <= (a.radius + b.radius));
