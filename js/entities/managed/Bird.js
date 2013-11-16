@@ -97,10 +97,6 @@
             Game.map.addChild(bomb, ObjectMode.BOMB);
             
             bomb.setup();
-
-            bomb.current = bombs.length;
-
-            bombs.push(bomb);
         }
     }
 

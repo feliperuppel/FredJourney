@@ -16,6 +16,13 @@ Game.stage = null;
  */
 Game.phaseManager;
 
+var person;
+var persons;
+
+var bombs = [];
+
+
+
 var KEYCODE_ENTER = 13;		//usefull keycode
 var KEYCODE_SPACE = 32;		//usefull keycode
 var KEYCODE_UP = 38;		//usefull keycode
@@ -70,7 +77,7 @@ function init() {
     // Pega o canvas
     canvas = document.getElementById("gameCanvas");
 
-    if (canvas == null) {
+    if (canvas === null) {
         alert("Falhou ao recuperar o elemento canvas!");
         return;
     }
@@ -121,7 +128,6 @@ function tick() {
     Game.phaseManager.tick()
     Game.stage.update();
 }
-
 function checkBirdMovements() {
 
     if (Game.bird.isFlying) {

@@ -15,9 +15,7 @@
 
     p.decX;
     p.decY;
-
-    p.current;
-
+    
     /**
      * Only used to impact test (w and h)
      */
@@ -64,7 +62,7 @@
         this.thrust = 0;
     };
 
-    p.tick = function(event) {
+    p.tick = function() {
 
         if (this.active) {
 
@@ -91,6 +89,7 @@
 
             if (this.decX === 0 && this.decY === 0) {
                 this.active = false;
+                Game.ignoreBomb();
             }
         }
     };
@@ -98,8 +97,8 @@
     p.setup = function() {
         // Pega a velocidade do mapa,  incrementa 15 %
         // adiciona ao mapa
-        this.vX = (Game.map.velocityX + Game.map.velocityX * .15) * -1;
-        this.vY = (Game.map.velocityY + Game.map.velocityY * .15) * -1;
+        this.vX = (Game.map.velocityX + Game.map.velocityX * .30) * -1;
+        this.vY = (Game.map.velocityY + Game.map.velocityY * .30) * -1;
 
 
         this.decX = this.vX * .1;

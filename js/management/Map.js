@@ -60,16 +60,25 @@
             childs.push(ob);
             modes.push(mode);
         }
-    }
+    };
 
     p.removeChild = function(ob) {
-        this.parent_removeChild(ob)
+        this.parent_removeChild(ob);
         var i = childs.indexOf(ob);
         childs.slice(i, 1);
         modes.slice(i, 1);
+    };
+    function tickObjects() {
+        for (var c in childs) {
+            if (childs[c].active) {
+                childs[c].tick();
+            }
+        }
     }
 
     p.tick = function() {
+        
+        tickObjects();
 
         for (i in childs) {
 
@@ -95,16 +104,12 @@
                             console.log("Object not suport impact " + (curObject.name || typeof curObject) + " (found an object without impact method)");
 
                         } else {
-                            try {
-                                // Sim, testa o hit
-                                if (CollisionUtil.testHit(curObject, c)) {
+                            // Sim, testa o hit
+                            if (CollisionUtil.testHit(curObject, c)) {
 
-                                    // Foi hitado, notifica o objeto
-                                    c.impact(curObject, mode);
+                                // Foi hitado, notifica o objeto
+                                c.impact(curObject, mode);
 
-                                }
-                            } catch (e) {
-                                console.log(e);
                             }
                         }
                     }
@@ -123,11 +128,11 @@
         return pos;
 
     };
-    
-    p.getChilds = function(){
+
+    p.getChilds = function() {
         return childs;
     };
-    
+
     window.Map = Map;
 }(window));
 
