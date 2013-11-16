@@ -95,7 +95,7 @@
                         } else {
                             try {
                                 // Sim, testa o hit
-                                if (Utils.testHit(curObject, c)) {
+                                if (CollisionUtil.testHit(curObject, c)) {
 
                                     // Foi hitado, notifica o objeto
                                     c.impact(curObject, mode);

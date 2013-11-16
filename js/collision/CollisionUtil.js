@@ -1,4 +1,4 @@
-var Utils = {};
+var CollisionUtil = {};
 
 /**
  * @param easeljs.Bitmap a
@@ -6,15 +6,16 @@ var Utils = {};
  * @returns boolean 
  */
 
-Utils.testHit = function(a, b) {
+CollisionUtil.testHit = function(a, b) {
 
     if (a.active && b.active) {
-        Utils.checkArea(a);
-        Utils.checkArea(b);
+        CollisionUtil.checkArea(a);
+        CollisionUtil.checkArea(b);
 
-        var hited = Utils.checkRectCollision(a, b);
+        var hited = CollisionUtil.checkRectCollision(a, b);
+        
         if (hited) {
-            console.log("!!Hited");
+            console.log("-----------> Hited!");
         }
 
         return hited;
@@ -24,11 +25,10 @@ Utils.testHit = function(a, b) {
 
 /**
  * 
- * @param Element a
+ * @param {} a
  * @returns Object
  */
-
-Utils.checkArea = function(a) {
+CollisionUtil.checkArea = function(a) {
     if (!a.hitAreaX) {
         a.hitAreaX = a.width;
     }
@@ -50,9 +50,9 @@ Utils.checkArea = function(a) {
         console.warn("Object: {" + a + "} without radius");
         a.radius = a.width / 2;
     }
-}
+};
 
-Utils.checkRectCollision = function(a, b) {
+CollisionUtil.checkRectCollision = function(a, b) {
 
     var h;
     var w;
@@ -72,4 +72,4 @@ Utils.checkRectCollision = function(a, b) {
     var d = Math.sqrt((h * h) + (w * w));
 
     return (d <= (a.radius + b.radius));
-}
+};
