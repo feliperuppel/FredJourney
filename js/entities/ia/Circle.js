@@ -48,10 +48,11 @@
         //draw ship body
         var g = this.graphics;
         
-        g.beginFill("red").drawCircle(0, 0, 40);
+        g.beginFill("blue").drawCircle(0, 0, 47.5);
         //furthest visual element
         this.bounds = 10;
         this.hit = this.bounds;
+        this.radius = 40;
     };
 
     p.setRandomSpeed = function(max, min) {

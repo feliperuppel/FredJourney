@@ -177,7 +177,7 @@ function handleClick(event) {
 
     var lastChildren;
 
-    for (var i = 0; i < 5; i++) {
+    for (var i = 0; i < 1; i++) {
         randomicPerson = (Math.floor(Math.random() * (max - min + 1)) + min);
         circle = new Circle();
         circle.x = (canvas.width / 2) + (i * 95);
