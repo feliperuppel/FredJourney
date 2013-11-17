@@ -6,13 +6,13 @@ var CollisionUtil = {};
  * @returns boolean 
  */
 
-CollisionUtil.testHit = function(a, b) {
+CollisionUtil.checkRadiusCollision = function(a, b) {
 
     if (a.active && b.active) {
         CollisionUtil.checkArea(a);
         CollisionUtil.checkArea(b);
 
-        var hited = CollisionUtil.checkRectCollision(a, b);
+        var hited = CollisionUtil.checkCircleCollision(a, b);
 
         if (hited) {
 
@@ -47,7 +47,7 @@ CollisionUtil.checkArea = function(a) {
     }
 };
 
-CollisionUtil.checkRectCollision = function(a, b) {
+CollisionUtil.checkCircleCollision = function(a, b) {
 
     var h;
     var w;
@@ -62,4 +62,74 @@ CollisionUtil.checkRectCollision = function(a, b) {
         console.log("h: " + h + ", w: " + w + ", d:" + d);
     }
     return hit;
+};
+
+CollisionUtil.checkRectCollision = function(a, b) {
+
+
+    if (!a.blockArea) {
+        a.blockArea = CollisionUtil.buildBlockArea(a);
+    }
+
+    if (!b.blockArea) {
+        b.blockArea = CollisionUtil.buildBlockArea(b);
+    }
+
+    var blocked = false;
+
+    // Check block
+    // Check c point
+    if (a.blockArea.c.x >= b.blockArea.a.x && a.blockArea.c.x <= b.blockArea.b.x
+            && a.blockArea.c.y >= b.blockArea.a.y && a.blockArea.c.y <= b.blockArea.d.y) {
+        blocked = true;
+        // Check b point
+    } else if (a.blockArea.b.x >= b.blockArea.a.x && a.blockArea.b.x <= b.blockArea.b.x
+            && a.blockArea.b.y >= a.blockArea.a.y) {
+        blocked = true;
+        // Check d point
+    } else if (a.blockArea.d.x >= b.blockArea.a.x && a.blockArea.d.x <= b.blockArea.b.x
+            && a.blockArea.d.y >= b.blockArea.b.y && a.blockArea.d.y <= b.blockArea.d.y) {
+        blocked = true;
+        // Check a point
+    } else if (a.blockArea.a.x >= b.blockArea.a.x && a.blockArea.a.x <= b.blockArea.b.x
+            && a.blockArea.a.y >= b.blockArea.a.y && a.blockArea.a.y <= b.blockArea.d.y) {
+        blocked = true;
+    }
+
+    return blocked;
+};
+
+CollisionUtil.buildBlockArea = function(a) {
+
+    if (!a.hitAreaX) {
+        a.hitAreaX = a.width;
+    }
+
+    if (!a.centerX) {
+        a.centerX = a.width / 2;
+    }
+
+    if (!a.centerY) {
+        a.centerY = a.height / 2;
+    }
+
+    var obj = {};
+
+    obj.a = {};
+    obj.a.x = a.x + (a.centerX / 2) - (a.hitAreaX / 2);
+    obj.a.y = a.x + (a.centerY / 2) - (a.hitAreaX / 2);
+
+    obj.b = {};
+    obj.b.x = obj.a.x + a.hitAreaX;
+    obj.b.y = obj.a.y;
+
+    obj.c = {};
+    obj.c.x = obj.b.x;
+    obj.c.y = obj.b.x + a.hitAreaY;
+
+    obj.d = {};
+    obj.d.x = obj.a.x;
+    obj.d.y = obj.c.y;
+
+    return obj;
 };

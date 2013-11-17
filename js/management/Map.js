@@ -28,6 +28,10 @@
 
     var childs = [];
 
+    var elements = [];
+
+    var blocks = [];
+
     var modes = [];
 
     Map.MAX_VELOCITY = 15;
@@ -47,8 +51,7 @@
 
         if (typeof mode === 'undefined') {
             mode = ObjectMode.IGNORE;
-            console.log("Object add without mode, it will logged in next line \\/");
-            console.log(ob)
+            console.log("Object (name: " + ob.name + ") added without mode");
         }
 
         if (typeof zOrder !== 'undefined') {
@@ -62,15 +65,33 @@
 
             childs.push(ob);
             modes.push(mode);
+
+            if (mode === ObjectMode.BLOCK) {
+                blocks.push(ob);
+            } else if (mode === ObjectMode.ELEMENT || mode === ObjectMode.BOMB) {
+                elements.push(ob);
+            }
         }
     };
 
     p.removeChild = function(ob) {
         this.parent_removeChild(ob);
         var i = childs.indexOf(ob);
+
+        // Get mode of element
+        var mode = modes[i];
+
+        if (mode === ObjectMode.BLOCK) {
+            blocks.slice(blocks.indexOf(ob), 1);
+        } else if (mode === ObjectMode.ELEMENT || mode === ObjectMode.BOMB) {
+            elements.slice(elements.indexOf(ob), 1);
+        }
+
         childs.slice(i, 1);
         modes.slice(i, 1);
+
     };
+
     function tickObjects() {
         for (var c in childs) {
             if (childs[c].active) {
@@ -90,8 +111,6 @@
             } else if (b.x + b.radius >= Map.WIDTH) {
                 b.notifyMapLimit(Directions.RIGHT);
             }
-        } else {
-            console.log("ERROR: object (name:" + b.name + ") does not implement #notifyMapLimit");
         }
     };
 
@@ -99,38 +118,57 @@
 
         tickObjects();
 
-        for (i in childs) {
+        for (i in elements) {
 
             // Executa um loop em todos os elementos
-            var curObject = childs[i];
-            var mode = modes[i];
+            var curObject = elements[i];
+
+            var mode = modes[childs.indexOf(curObject)];
 
             // É um objeto que pode gerar impacto?
             if (mode !== ObjectMode.FLY && mode !== ObjectMode.IGNORE && mode !== ObjectMode.TEXTURE && mode !== ObjectMode.BLOCK) {
+                // Sim...
+                // O Objeto é do tipo element ( teste de mapa é ignorado para bombas )
+                if (mode === ObjectMode.ELEMENT) {
+                    // Objeto está no limite do mapa?
+                    this.checkLimits(curObject);
+                }
 
-                // Objecto está no limite?
-                this.checkLimits(curObject);
+                // Lopa nos elementos e checa impacto usando raio
+                for (y in elements) {
 
-                // Sim, loopa novamente todos os objetos
-                for (y in childs) {
+                    var c = elements[y];
 
-                    var c = childs[y];
-
-                    // O object é do tipo Element (Pessoa)? 
-                    if (modes[y] === ObjectMode.ELEMENT && c !== curObject) {
-
+                    // O objeto não é mesmo que está sendo testado no momento?
+                    if (c !== curObject) {
                         // O objeto está preparado para receber impacto?
-                        if (!c.impact) {
-
-                            // Não ignora, mas gera o erro
-                            console.log("Object not suport impact " + (curObject.name || typeof curObject) + " (found an object without impact method)");
-
-                        } else {
+                        if (c.impact) {
                             // Sim, testa o hit
-                            if (CollisionUtil.testHit(curObject, c)) {
+                            if (CollisionUtil.checkRadiusCollision(curObject, c)) {
 
                                 // Foi hitado, notifica o objeto
                                 c.impact(curObject, mode);
+
+                            }
+                        }
+                    }
+                }
+
+                // Lopa nos blocos e checa impacto usando raio
+                for (y in blocks) {
+
+                    var c = blocks[y];
+
+                    // O objeto não é mesmo que está sendo testado no momento?
+                    if (c !== curObject) {
+
+                        // O objeto está preparado para receber impacto?
+                        if (c.impact) {
+                            // Sim, testa o hit
+                            if (CollisionUtil.checkRectCollision(curObject, c)) {
+
+                                // Foi hitado, notifica o objeto
+                                c.impact(curObject, ObjectMode.BLOCK);
 
                             }
                         }

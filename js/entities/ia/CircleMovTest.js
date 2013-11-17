@@ -115,8 +115,7 @@
             }
         }
     };
-
-
+    
     p.impact = function(obj, mode) {
         if (this.active && obj.active) {
             if (mode === ObjectMode.BOMB) {
@@ -128,7 +127,6 @@
             }
         }
     };
-
 
     p.notifyMapLimit = function(dir) {
         console.log("WARNING: object (name:" + this.name + ") get Map limit");
