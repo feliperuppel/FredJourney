@@ -33,7 +33,7 @@ function Phase() {
     };
 
     this.close = function() {
-
+        
     };
 
     this.setObjective = function(obj) {
@@ -53,12 +53,12 @@ function Phase() {
 
             do {
                 person.x = NumberUtils.getRandomInt(100, 3600);
-                person.y = NumberUtils.getRandomInt(100, 2300);
+                person.y = NumberUtils.getRandomInt(100, 2400);
 
             } while (Game.map.isBlockedPos(person.x, person.y, person.height, person.width, true));
 
             this.persons.push(person);
-
+            
             //Adicionar person ao container ao invés de map
             Game.map.addChild(person, ObjectMode.ELEMENT);
         }

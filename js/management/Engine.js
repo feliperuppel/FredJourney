@@ -58,10 +58,6 @@ function handleClick(event) {
     // Hide anything on stage and show the score
     Game.stage.removeAllChildren();
 
-    //create the player
-    // Criar Map
-    Game.map = new Map();
-
     Game.stage.enableMouseOver(10);
 
     Game.phaseManager.load(new PhaseTest(), new PhaseObjective());

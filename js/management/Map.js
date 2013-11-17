@@ -225,8 +225,14 @@
         return childs;
     };
 
-    p.addElemntRandoLocation = function(obj) {
-        var pos = {};
+    p.addElementRandoLocation = function(obj, mode, zOrder) {
+        
+        do {
+            obj.x = NumberUtils.getRandomInt(0, 3600);
+            obj.y = NumberUtils.getRandomInt(0, 2400);
+        } while (!this.isBlockedPos(obj.x, obj.y, obj.height, obj.widht, true));
+        
+        this.addChild(obj, mode, zOrder);
 
     };
 

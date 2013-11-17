@@ -23,7 +23,7 @@
     
     function addBlocks(){
         for(i = 0; i < 50; i++){
-            var block = new Block(NumberUtils.getRandomInt(100, 500), NumberUtils.getRandomInt(100, 500))
+            var block = new Block(NumberUtils.getRandomInt(50, 150), NumberUtils.getRandomInt(50, 150))
             block.x = NumberUtils.getRandomInt(0, 3600);
             block.y = NumberUtils.getRandomInt(0, 2400);
             Game.map.addChild(block, ObjectMode.BLOCK);

@@ -137,10 +137,8 @@
                 Game.map.removeChild(this);
             } else if (mode === ObjectMode.ELEMENT) {
                 this.setRandomDirection();
-
             } else if (mode === ObjectMode.BLOCK) {
                 this.invertDirection();
-
             }
         }
     };
