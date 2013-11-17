@@ -60,3 +60,7 @@ Game.showMenu = function() {
     }
 
 };
+
+Game.ignoreBomb = function(a){
+    
+};

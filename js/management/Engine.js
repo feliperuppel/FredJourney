@@ -2,22 +2,6 @@
 var messageField;       //Message display field
 var velocityField;
 var scoreField;         //score Field
-var canvas;
-
-// Usefull keycode
-var KEYCODE_ENTER = 13;		//
-var KEYCODE_SPACE = 32;		//usefull keycode
-var KEYCODE_UP = 38;		//usefull keycode
-var KEYCODE_LEFT = 37;		//usefull keycode
-var KEYCODE_RIGHT = 39;		//usefull keycode
-var KEYCODE_DOWN = 40;		//usefull keycode
-var KEYCODE_W = 87;			//usefull keycode
-var KEYCODE_A = 65;			//usefull keycode
-var KEYCODE_D = 68;
-var KEYCODE_S = 83;
-var KEYCODE_Q = 81;
-var KEYCODE_SPACE = 32;
-
 // vars to control move of Bird ( the thurst is the move of Map)
 var movingUp = false;
 var movingDown = false;
@@ -56,16 +40,16 @@ function init() {
 
     messageField.maxWidth = 1000;
     messageField.textAlign = "center";
-    messageField.x = canvas.width / 2;
-    messageField.y = canvas.height / 2;
+    messageField.x = Game.canvas.width / 2;
+    messageField.y = Game.canvas.height / 2;
     //watch for clicks
     Game.stage.addChild(messageField);
 
-    canvas.onclick = handleClick;
+    Game.canvas.onclick = handleClick;
     Game.stage.update();
 
 }
-stage.enableMouseOver(10);
+
 function handleClick(event) {
     // Prevent extra clicks and hide text
     Game.canvas.onclick = null;
@@ -91,7 +75,7 @@ function handleClick(event) {
 
 function tick() {
     checkBirdMovements();
-    Game.phaseManager.tick()
+    Game.phaseManager.tick();
     Game.stage.update();
 }
 
@@ -179,30 +163,32 @@ function handleKeyDown(e) {
         }
 
         switch (e.keyCode) {
-            case KEYCODE_A:
-            case KEYCODE_LEFT:
+            case KeyBoard.A:
+            case KeyBoard.LEFT:
                 movingLeft = true;
                 return false;
 
-            case KEYCODE_D:
-            case KEYCODE_RIGHT:
+            case KeyBoard.D:
+            case KeyBoard.RIGHT:
                 movingRight = true;
                 return false;
 
-            case KEYCODE_W:
-            case KEYCODE_UP:
+            case KeyBoard.W:
+            case KeyBoard.UP:
                 movingUp = true;
                 return false;
 
-            case KEYCODE_S:
-            case KEYCODE_DOWN:
+            case KeyBoard.S:
+            case KeyBoard.DOWN:
                 movingDown = true;
                 return false;
 
-            case KEYCODE_ENTER:
-                if (canvas.onclick == handleClick) {
-                    handleClick();
+            case KeyBoard.ENTER:
+                
+                if (Game.canvas.onclick !== handleClick) {
+                    Game.canvas.click();
                 }
+                
                 return false;
         }
     }
@@ -219,27 +205,27 @@ function handleKeyUp(e) {
 
         switch (e.keyCode) {
 
-            case KEYCODE_A:
-            case KEYCODE_LEFT:
+            case KeyBoard.A:
+            case KeyBoard.LEFT:
                 movingLeft = false;
                 return false;
 
-            case KEYCODE_D:
-            case KEYCODE_RIGHT:
+            case KeyBoard.D:
+            case KeyBoard.RIGHT:
                 movingRight = false;
                 return false;
 
-            case KEYCODE_W:
-            case KEYCODE_UP:
+            case KeyBoard.W:
+            case KeyBoard.UP:
                 movingUp = false;
                 return false;
 
-            case KEYCODE_S:
-            case KEYCODE_DOWN:
+            case KeyBoard.S:
+            case KeyBoard.DOWN:
                 movingDown = false;
                 return false;
 
-            case KEYCODE_ENTER:
+            case KeyBoard.ENTER:
 
                 if (canvas.onclick === handleClick) {
                     handleClick();
@@ -247,7 +233,7 @@ function handleKeyUp(e) {
 
                 return false;
 
-            case KEYCODE_Q:
+            case KeyBoard.Q:
                 if (Game.bird.isFlying &&
                         ((Game.map.velocityX >= 0 && Game.map.velocityX <= Map.MINIMUN_VELOCITY)
                                 || (Game.map.velocityX <= 0 && (Game.map.velocityX * -1) <= Map.MINIMUN_VELOCITY)) &&
@@ -262,7 +248,7 @@ function handleKeyUp(e) {
                     Game.bird.isFlying = true;
                 }
                 return false;
-            case KEYCODE_SPACE:
+            case KeyBoard.SPACE:
                 Game.bird.fire();
                 return false;
         }

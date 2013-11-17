@@ -122,8 +122,8 @@
 
         var pos = {};
 
-        pos.x = (this.x * -1) + canvas.width / 2;
-        pos.y = (this.y * -1) + canvas.height / 2;
+        pos.x = (this.x * -1) + Game.canvas.width / 2;
+        pos.y = (this.y * -1) + Game.canvas.height / 2;
 
         return pos;
 

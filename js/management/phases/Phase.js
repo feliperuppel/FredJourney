@@ -48,8 +48,8 @@ function Phase() {
         for (i = 0; i < qtd; i++) {
             randomicPerson = (Math.floor(Math.random() * (max - min + 1)) + min);
             person = new Person("assets/person-" + randomicPerson + ".png");
-            person.x = 0 + (i * Math.floor(Math.random() * canvas.width));
-            person.y = 0 + (i * Math.floor(Math.random() * canvas.height))
+            person.x = 0 + (i * Math.floor(Math.random() * Game.canvas.width));
+            person.y = 0 + (i * Math.floor(Math.random() * Game.canvas.height))
 
             this.persons.push(person);
             

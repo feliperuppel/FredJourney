@@ -38,6 +38,7 @@
 
         this.hitAreaX = 12;
         this.hitAreaY = 12;
+        this.radius = 7.5;
 
         var localSpriteSheet = new createjs.SpriteSheet({
             images: [img], //image to use

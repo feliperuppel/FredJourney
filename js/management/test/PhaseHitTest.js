@@ -36,8 +36,8 @@
         for (i = 0; i < qtd; i++) {
             randomicPerson = (Math.floor(Math.random() * (max - min + 1)) + min);
             circle = new Circle();
-            circle.x = 0 + (i * Math.floor(Math.random() * canvas.width));
-            circle.y = 0 + (i * Math.floor(Math.random() * canvas.height))
+            circle.x = 0 + (i * Math.floor(Math.random() * Game.canvas.width));
+            circle.y = 0 + (i * Math.floor(Math.random() * Game.canvas.height))
 
             this.circles.push(circle);
             

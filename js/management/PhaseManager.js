@@ -52,8 +52,8 @@ function PhaseManager() {
 
         messageField.maxWidth = 1000;
         messageField.textAlign = "right";
-        messageField.x = canvas.width - 100;
-        messageField.y = canvas.height - 40;
+        messageField.x = Game.canvas.width - 100;
+        messageField.y = Game.canvas.height - 40;
 
         loader = new createjs.LoadQueue(false);
         loader.onFileLoad = handleFileLoad;
@@ -88,20 +88,21 @@ function PhaseManager() {
             }
         }
 
-        canvas.onclick = handleClick;
+        Game.canvas.onclick = handleClick;
         messageField.text = "> Play";
         Game.stage.update();
     }
 
     function handleClick() {
 
-        canvas.onclick = null;
+        Game.canvas.onclick = null;
 
+        Game.stage.removeAllChildren();
         Game.stage.clear();
 
         velocityField = new createjs.Text("X:0 Y:0", "bold 14px Arial", "#000");
         velocityField.textAlign = "right";
-        velocityField.x = canvas.width - 100;
+        velocityField.x = Game.canvas.width - 100;
         velocityField.y = 22;
 
         Game.map.addChild(inferior, ObjectMode.IGNORE, 0);
@@ -109,8 +110,8 @@ function PhaseManager() {
         Game.stage.addChild(Game.map);
 
         Game.playing = true;
-        Game.bird.x = canvas.width / 2;
-        Game.bird.y = canvas.height / 2;
+        Game.bird.x = Game.canvas.width / 2;
+        Game.bird.y = Game.canvas.height / 2;
 
         Game.stage.addChild(Game.bird);
 
@@ -120,6 +121,7 @@ function PhaseManager() {
 
         curPhase.setObjective(curObjective);
         curPhase.start();
+        Game.stage.
         Game.stage.update();
     }
 
