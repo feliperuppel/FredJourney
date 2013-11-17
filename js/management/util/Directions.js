@@ -1,12 +1,12 @@
 var Directions = {};
-Directions.UP = 0;
-Directions.RIGHT_UP = 1;
-Directions.RIGHT = 2;
-Directions.RIGHT_DOWN = 3;
-Directions.DOWN = 4;
-Directions.LEFT_DOWN = 5;
-Directions.LEFT = 6;
-Directions.LEFT_UP = 7;
+Directions.UP = 1;
+Directions.RIGHT_UP = 2;
+Directions.RIGHT = 3;
+Directions.RIGHT_DOWN = 4;
+Directions.DOWN = 5;
+Directions.LEFT_DOWN = 6;
+Directions.LEFT = 7;
+Directions.LEFT_UP = 8;
 
 Directions.getInverted = function(dir) {
     if (dir === Directions.UP) {

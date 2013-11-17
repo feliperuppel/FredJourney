@@ -13,7 +13,7 @@
 
     p.bounds;
     p.hit;
-    p.randomDirection;
+    p.direction;
     p.randomSpeedForWalk;
     p.randomTimeForWalk;
     p.countTimeForWalk = 0;
@@ -40,31 +40,6 @@
         var img = new Image();
 
         img.src = imgSrc;
-
-//    	var localSpriteSheet = new createjs.SpriteSheet({
-//            images: [img], //image to use
-//            frames: {width: 60, height: 120, regX: 30, regY: 120},
-//            animations: {
-//            	
-//////                down: [0, 7, "down", 4],
-//////                up: [23, 30, "up", 4],
-//////                left: [8, 15, "left", 4],
-//////	            right: [16, 22, "right", 4],
-//////	            stoped_down: [0, 1, "s_down", 4],
-//////	            stoped_up: [23, 24, "s_up", 4],
-//////	            stoped_left: [8, 9, "s_left", 4],
-//////	            stoped_right: [16, 17, "s_right", 4],
-////            	
-//                down: [23, 30, "down", 4],
-//                up: [0, 7, "up", 4],
-//                left: [16, 22, "left", 4],
-//	            right: [8, 15, "right", 4],
-//	            stoped_down: [31, 33, "s_down", 4],
-//	            stoped_up: [40, 42, "s_up", 4],
-//	            stoped_left: [34, 36, "s_left", 4],
-//	            stoped_right: [37, 39, "s_right", 4],
-//            }
-//        });
 
         var localSpriteSheet = new createjs.SpriteSheet({
             images: [img], //image to use
@@ -96,7 +71,7 @@
     };
 
     p.setRandomDirection = function() {
-        this.randomDirection = parseInt(Math.random() * 10);
+        this.direction = NumberUtils.getRandomInt(1, 8);
     };
 
     p.setRandomTime = function(averageTime) {
@@ -112,68 +87,42 @@
                 this.countTimeForWalk = 0;
             }
 
-            if (this.randomDirection <= 1) {
-                //Incrementa X : Está indo para a ESQUERDA
+            if (this.direction === Directions.RIGHT) {
+                // Incrementa X : Está indo para a ESQUERDA
                 this.x += this.randomSpeedForWalk;
                 this.newDirection = "right";
 
-            } else if (this.randomDirection <= 3) {
-                //Incrementa Y : Está indo para CIMA
+            } else if (this.direction === Directions.DOWN) {
+                // Incrementa Y : Está indo para BAIXO
                 this.y += this.randomSpeedForWalk;
                 this.newDirection = "down";
 
-            } else if (this.randomDirection <= 5) {
-                //Decrementa X : Está indo para DIREITA
+            } else if (this.direction === Directions.LEFT) {
+                // Decrementa X : Está indo para ESQUERDA
                 this.x -= this.randomSpeedForWalk;
                 this.newDirection = "left";
 
-            } else if (this.randomDirection <= 7) {
-                //Decrementa Y : Está indo para BAIXO
+            } else if (this.direction === Directions.UP) {
+                // Decrementa Y : Está indo para CIMA
                 this.y -= this.randomSpeedForWalk;
                 this.newDirection = "up";
 
             } else {
-
-//			switch(this.lastDirection){
-//			case "right":
-//				velocityField.text += "\ns_right";
-//				this.newDirection = "s_right";
-//				break;
-//			case "left":
-//				velocityField.text += "\ns_left";
-//				this.newDirection = "s_left";
-//				break;
-//			case "up":
-//				velocityField.text += "\ns_up";
-//				this.newDirection = "s_up";
-//				break;
-//			case "down":
-//				velocityField.text += "\ns_down";
-//				this.newDirection = "s_down";
-//				break;
-//			}
-
-                if (this.lastDirection == "right") {
+                if (this.lastDirection === "right") {
                     this.newDirection = "s_right";
-                } else if (this.lastDirection == "left") {
+                } else if (this.lastDirection === "left") {
                     this.newDirection = "s_left";
-                } else if (this.lastDirection == "up") {
+                } else if (this.lastDirection === "up") {
                     this.newDirection = "s_up";
-                } else if (this.lastDirection == "down") {
+                } else if (this.lastDirection === "down") {
                     this.newDirection = "s_down";
                 }
-
             }
 
-//    	velocityField.text = "\nlastDirection: "+this.lastDirection;
-
-            if (this.lastDirection != this.newDirection) {
+            if (this.lastDirection !== this.newDirection) {
                 this.lastDirection = this.newDirection;
                 this.gotoAndPlay(this.newDirection);
             }
-
-//    	velocityField.text += "\nMoving: "+this.currentAnimation;
-//    	velocityField.text += "\nnewDirection: "+this.newDirection;
 
             this.countTimeForWalk++;
         }
@@ -182,20 +131,49 @@
 
     p.impact = function(obj, mode) {
         if (this.active && obj.active) {
-            if (mode == ObjectMode.BOMB) {
+            if (mode === ObjectMode.BOMB) {
                 this.active = false;
                 obj.active = false;
                 Game.map.removeChild(this);
-            } else if (mode == ObjectMode.ELEMENT) {
+            } else if (mode === ObjectMode.ELEMENT) {
                 this.setRandomDirection();
-//                console.log("This Person ("+this.id+") has encontered another Person ("+obj.id+")");
-            } else if (mode == ObjectMode.BLOCK) {
-                this.setRandomDirection();
-//                console.log("This Person ("+this.id+") has encontered an Block");
+
+            } else if (mode === ObjectMode.BLOCK) {
+                this.invertDirection();
+
             }
         }
     };
-    
-    
+
+
+
+    p.notifyMapLimit = function(dir) {
+        this.changeDirection(Directions.getInverted(dir));
+    };
+
+    p.changeDirection = function(dir) {
+        if (!dir) {
+            if (this.direction === Directions.DOWN) {
+                this.direction = Directions.LEFT;
+            } else if (this.direction === Directions.LEFT) {
+                this.direction = Directions.UP;
+            } else if (this.direction === Directions.RIGHT) {
+                this.direction = Directions.DOWN;
+            } else if (this.direction === Directions.UP) {
+                this.direction = Directions.RIGHT;
+            }
+        } else {
+            this.direction = dir;
+        }
+    };
+
+    /**
+     * Inverete a direção do circulo
+     * @returns void
+     */
+    p.invertDirection = function() {
+        this.direction = Directions.getInverted(this.direction);
+    };
+
     window.Person = Person;
 }(window));

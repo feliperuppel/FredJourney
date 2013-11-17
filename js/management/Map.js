@@ -28,7 +28,9 @@
 
     var childs = [];
 
-    var elements = [];
+    var persons = [];
+
+    var bombs = [];
 
     var blocks = [];
 
@@ -68,8 +70,10 @@
 
             if (mode === ObjectMode.BLOCK) {
                 blocks.push(ob);
-            } else if (mode === ObjectMode.ELEMENT || mode === ObjectMode.BOMB) {
-                elements.push(ob);
+            } else if (mode === ObjectMode.ELEMENT) {
+                persons.push(ob);
+            } else if (mode === ObjectMode.BOMB) {
+                bombs.push(ob);
             }
         }
     };
@@ -83,8 +87,10 @@
 
         if (mode === ObjectMode.BLOCK) {
             blocks.slice(blocks.indexOf(ob), 1);
-        } else if (mode === ObjectMode.ELEMENT || mode === ObjectMode.BOMB) {
-            elements.slice(elements.indexOf(ob), 1);
+        } else if (mode === ObjectMode.ELEMENT) {
+            persons.slice(persons.indexOf(ob), 1);
+        } else if (mode === ObjectMode.BOMB) {
+            bombs.slice(bombs.indexOf(ob), 1);
         }
 
         childs.slice(i, 1);
@@ -94,7 +100,7 @@
 
     function tickObjects() {
         for (var c in childs) {
-            if (childs[c].active) {
+            if (childs[c].active && childs[c].tick) {
                 childs[c].tick();
             }
         }
@@ -116,66 +122,92 @@
 
     p.tick = function() {
 
-        tickObjects();
-
-        for (i in elements) {
+        for (i in persons) {
 
             // Executa um loop em todos os elementos
-            var curObject = elements[i];
+            var curObject = persons[i];
 
-            var mode = modes[childs.indexOf(curObject)];
+            if (curObject.impact) {
 
-            // É um objeto que pode gerar impacto?
-            if (mode !== ObjectMode.FLY && mode !== ObjectMode.IGNORE && mode !== ObjectMode.TEXTURE && mode !== ObjectMode.BLOCK) {
-                // Sim...
-                // O Objeto é do tipo element ( teste de mapa é ignorado para bombas )
-                if (mode === ObjectMode.ELEMENT) {
-                    // Objeto está no limite do mapa?
-                    this.checkLimits(curObject);
-                }
+                var mode = modes[childs.indexOf(curObject)];
 
-                // Lopa nos elementos e checa impacto usando raio
-                for (y in elements) {
+                // É um objeto que pode gerar impacto?
+                if (mode !== ObjectMode.FLY && mode !== ObjectMode.IGNORE
+                        && mode !== ObjectMode.TEXTURE && mode !== ObjectMode.BLOCK) {
+                    // Sim...
+                    // O Objeto é do tipo element ( teste de mapa é ignorado para bombas )
+                    if (mode === ObjectMode.ELEMENT) {
+                        // Objeto está no limite do mapa?
+                        this.checkLimits(curObject);
 
-                    var c = elements[y];
+                        // Cria a base das dimensões do objeto (apenas a primeira vez)
+                        if (!curObject.blockArea) {
+                            CollisionUtil.checkDimensions(curObject);
+                        }
 
-                    // O objeto não é mesmo que está sendo testado no momento?
-                    if (c !== curObject) {
-                        // O objeto está preparado para receber impacto?
-                        if (c.impact) {
+                        // Faz um update na posição do Objeto (apenas para objetos que se movimentam)
+                        curObject.blockArea = CollisionUtil.buildBlockArea(curObject, true);
+
+                        // Lopa nos elementos e checa impacto usando raio
+                        for (y in persons) {
+
+                            var c = persons[y];
+
+                            // O objeto não é mesmo que está sendo testado no momento?
+                            if (c !== curObject) {
+                                // O objeto está preparado para receber impacto?
+
+                                // Sim, testa o hit
+                                if (CollisionUtil.checkRadiusCollision(curObject, c)) {
+
+
+                                    // Foi hitado, notifica o objeto
+                                    curObject.impact(c, mode);
+
+                                }
+
+                            }
+                        }
+
+                        // Lopa nas Bombas e checa impacto usando raio
+                        for (y in bombs) {
+
+                            var c = bombs[y];
+
                             // Sim, testa o hit
                             if (CollisionUtil.checkRadiusCollision(curObject, c)) {
 
                                 // Foi hitado, notifica o objeto
-                                c.impact(curObject, mode);
+                                curObject.impact(c, ObjectMode.BOMB);
 
                             }
+
                         }
                     }
-                }
 
-                // Lopa nos blocos e checa impacto usando raio
-                for (y in blocks) {
+                    // Lopa nos blocos e checa impacto usando raio
+                    for (y in blocks) {
 
-                    var c = blocks[y];
+                        var c = blocks[y];
 
-                    // O objeto não é mesmo que está sendo testado no momento?
-                    if (c !== curObject) {
+                        if (!c.blockArea) {
+                            CollisionUtil.checkDimensions(c);
+                            c.blockArea = CollisionUtil.buildBlockArea(c);
+                        }
 
-                        // O objeto está preparado para receber impacto?
-                        if (c.impact) {
-                            // Sim, testa o hit
-                            if (CollisionUtil.checkRectCollision(curObject, c)) {
+                        // Testa o hit
+                        if (CollisionUtil.checkRectCollision(curObject, c)) {
 
-                                // Foi hitado, notifica o objeto
-                                c.impact(curObject, ObjectMode.BLOCK);
+                            // Foi hitado, notifica o objeto
+                            curObject.impact(c, ObjectMode.BLOCK);
 
-                            }
                         }
                     }
                 }
             }
         }
+
+        tickObjects();
     };
 
     p.getCenterPos = function() {
@@ -191,6 +223,44 @@
 
     p.getChilds = function() {
         return childs;
+    };
+
+    p.addElemntRandoLocation = function(obj) {
+        var pos = {};
+
+    };
+
+    p.isBlockedPos = function(x, y, height, width, isCentralized) {
+
+        var obj = {};
+
+        obj.x = x;
+        obj.y = y;
+        obj.width = width;
+        obj.height = height;
+
+        CollisionUtil.checkDimensions(obj);
+
+        obj.blockArea = CollisionUtil.buildBlockArea(obj, isCentralized);
+
+        // Lopa nos blocos e checa impacto usando raio
+        for (y in blocks) {
+
+            var c = blocks[y];
+
+            if (!c.blockArea) {
+                CollisionUtil.checkDimensions(c);
+                c.blockArea = CollisionUtil.buildBlockArea(c);
+            }
+
+            // Testa o hit
+            if (CollisionUtil.checkRectCollision(obj, c)) {
+
+                return true;
+
+            }
+        }
+        return false;
     };
 
     window.Map = Map;

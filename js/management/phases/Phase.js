@@ -1,14 +1,14 @@
 
 function Phase() {
-    
+
     /**
      * 
      * @type PhaseObjective
      */
     var objective;
-    
+
     this.persons = new Array();
-    
+
     /**
      * 
      * @returns String[]
@@ -46,13 +46,19 @@ function Phase() {
         var min = 1;
         this.persons = new Array();
         for (i = 0; i < qtd; i++) {
+
             randomicPerson = (Math.floor(Math.random() * (max - min + 1)) + min);
+
             person = new Person("assets/person-" + randomicPerson + ".png");
-            person.x = 0 + (i * Math.floor(Math.random() * Game.canvas.width));
-            person.y = 0 + (i * Math.floor(Math.random() * Game.canvas.height))
+
+            do {
+                person.x = NumberUtils.getRandomInt(100, 3600);
+                person.y = NumberUtils.getRandomInt(100, 2300);
+
+            } while (Game.map.isBlockedPos(person.x, person.y, person.height, person.width, true));
 
             this.persons.push(person);
-            
+
             //Adicionar person ao container ao invés de map
             Game.map.addChild(person, ObjectMode.ELEMENT);
         }

@@ -35,6 +35,18 @@
         this.name = "CircleMovTest";
 
         this.active = true;
+        this.hitAreaX = 95;
+        this.hitAreaY = 95;
+        this.centerX = 47.5;
+        this.centerY = 47.5;
+
+        this.height = 47.5 * 2;
+        this.width = 47.5 * 2;
+        this.bounds = 10;
+        this.hit = this.bounds;
+        this.radius = 40;
+
+        this.moveQtds = 0;
 
         this.makeShape();
 
@@ -52,19 +64,10 @@
 
         g.beginFill("blue").drawCircle(0, 0, 47.5);
         //furthest visual element
-        this.bounds = 10;
-        this.hit = this.bounds;
-        // Checa o borwser.
-        //if (createjs.Sound.BrowserDetect.isIOS || createjs.Sound.BrowserDetect.isAndroid) {  // || createjs.Sound.BrowserDetect.isBlackberry  OJR blackberry has not been tested yet
-        //document.getElementById("mobile").style.display = "block";
-        //document.getElementById("content").style.display = "none";
-        //return;
-        //}
-        this.radius = 40;
     };
 
-    p.setRandomSpeed = function(max, min) {
-        this.randomSpeedForWalk = Math.floor(Math.random() * (max - min + 1)) + min; //(maxSpeed - minSpeed + 1) + minSpeed //cheat to return a randomic value in a range
+    p.setRandomSpeed = function() {
+        this.randomSpeedForWalk = 3;
     };
 
     p.setRandomDirection = function() {
@@ -77,6 +80,11 @@
 
     p.tick = function(event) {
         if (this.active) {
+
+            if (this.moveQtds === 30) {
+                this.moveQtds = 0;
+                this.changeDirection();
+            }
 
             if (this.direction === Directions.RIGHT) {
                 //Incrementa X : Está indo para a ESQUERDA
@@ -113,9 +121,11 @@
             if (this.lastDirection !== this.newDirection) {
                 this.lastDirection = this.newDirection;
             }
+
+            this.moveQtds++;
         }
     };
-    
+
     p.impact = function(obj, mode) {
         if (this.active && obj.active) {
             if (mode === ObjectMode.BOMB) {
@@ -129,13 +139,23 @@
     };
 
     p.notifyMapLimit = function(dir) {
-        console.log("WARNING: object (name:" + this.name + ") get Map limit");
         this.changeDirection(Directions.getInverted(dir));
-        console.log("New direction: " + this.newDirection + "(" + this.direction + ")");
     };
 
     p.changeDirection = function(dir) {
-        this.direction = dir;
+        if (!dir) {
+            if (this.direction === Directions.DOWN) {
+                this.direction = Directions.LEFT;
+            } else if (this.direction === Directions.LEFT) {
+                this.direction = Directions.UP;
+            } else if (this.direction === Directions.RIGHT) {
+                this.direction = Directions.DOWN;
+            } else if (this.direction === Directions.UP) {
+                this.direction = Directions.RIGHT;
+            }
+        } else {
+            this.direction = dir;
+        }
     };
 
     /**

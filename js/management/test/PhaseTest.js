@@ -2,16 +2,33 @@
 (function(window) {
 
     function PhaseTest() {
-
+        
     }
 
 
     var p = PhaseTest.prototype = new Phase();
+    
     /* @var p Phase */
     
     p.tick = function(event){
-        // include new objects on demand.
     };
+    
+    p.__start = p.start;
+    
+    // Override the original start method.
+    p.start = function(){
+        addBlocks();
+        p.__start();
+    };
+    
+    function addBlocks(){
+        for(i = 0; i < 50; i++){
+            var block = new Block(NumberUtils.getRandomInt(100, 500), NumberUtils.getRandomInt(100, 500))
+            block.x = NumberUtils.getRandomInt(0, 3600);
+            block.y = NumberUtils.getRandomInt(0, 2400);
+            Game.map.addChild(block, ObjectMode.BLOCK);
+        }
+    }
     
     p.assets = function() {
         return [
@@ -31,16 +48,6 @@
     ];
     };
     
-    // Override the original start method.
-    p._start = p.start;
-    
-    p.start = function (){
-        p._start();
-    }
-    
-    p.tick = function(evt){
-        
-    };
     
     this.name = "Fase de Teste";
     
