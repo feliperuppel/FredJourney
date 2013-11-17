@@ -121,7 +121,6 @@ function PhaseManager() {
 
         curPhase.setObjective(curObjective);
         curPhase.start();
-        Game.stage.
         Game.stage.update();
     }
 

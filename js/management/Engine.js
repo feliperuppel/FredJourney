@@ -13,9 +13,9 @@ document.onkeyup = handleKeyUp;
 
 // Ensure log is avaliable
 if (!console || !console.log) {
-    var console = {}
+    var console = {};
     console.log = function(a) {
-    }
+    };
 }
 
 function init() {
@@ -32,10 +32,10 @@ function init() {
     } catch (e) {
         console.log(e);
     }
-    
+
     // Inicializa controles do Jogo
     Game.setup();
-    
+
     messageField = new createjs.Text("Welcome: Click to play");
 
     messageField.maxWidth = 1000;
@@ -61,9 +61,9 @@ function handleClick(event) {
     //create the player
     // Criar Map
     Game.map = new Map();
-    
+
     Game.stage.enableMouseOver(10);
-    
+
     Game.phaseManager.load(new PhaseTest(), new PhaseObjective());
 
     //start game timer   
@@ -184,11 +184,11 @@ function handleKeyDown(e) {
                 return false;
 
             case KeyBoard.ENTER:
-                
+
                 if (Game.canvas.onclick !== handleClick) {
                     Game.canvas.click();
                 }
-                
+
                 return false;
         }
     }

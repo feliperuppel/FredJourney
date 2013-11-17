@@ -9,11 +9,14 @@
 
     var p = Map.prototype = new createjs.Container();
 
+    Map.WIDTH = 3600;
+    Map.HEIGHT = 2400;
+
     p.visbleWidht = 800;
     p.visbleHeight = 600;
 
-    p.width = 3600;
-    p.height = 2400;
+    p.width = Map.WIDTH;
+    p.height = Map.HEIGHT;
 
     // Some methods of Container will be changed
     p.ContainerInitializer = p.initialize;
@@ -76,8 +79,24 @@
         }
     }
 
+    p.checkLimits = function(b) {
+        if (b.notifyMapLimit) {
+            if (b.y < b.radius) {
+                b.notifyMapLimit(Directions.UP);
+            } else if (b.y + b.radius >= Map.HEIGHT) {
+                b.notifyMapLimit(Directions.DOWN);
+            } else if (b.x < b.radius) {
+                b.notifyMapLimit(Directions.LEFT);
+            } else if (b.x + b.radius >= Map.WIDTH) {
+                b.notifyMapLimit(Directions.RIGHT);
+            }
+        } else {
+            console.log("ERROR: object (name:" + b.name + ") does not implement #notifyMapLimit");
+        }
+    };
+
     p.tick = function() {
-        
+
         tickObjects();
 
         for (i in childs) {
@@ -87,7 +106,10 @@
             var mode = modes[i];
 
             // É um objeto que pode gerar impacto?
-            if (mode !== ObjectMode.FLY && mode !== ObjectMode.IGNORE && mode !== ObjectMode.TEXTURE) {
+            if (mode !== ObjectMode.FLY && mode !== ObjectMode.IGNORE && mode !== ObjectMode.TEXTURE && mode !== ObjectMode.BLOCK) {
+
+                // Objecto está no limite?
+                this.checkLimits(curObject);
 
                 // Sim, loopa novamente todos os objetos
                 for (y in childs) {

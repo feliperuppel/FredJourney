@@ -23,7 +23,7 @@ function init() {
 //    createjs.Ticker.useRAF = true;
 //    createjs.Ticker.setFPS(60);
     Game.setup();
-
+    
     try {
         // Checa se há plugin de som disponível
         if (!createjs.Sound.initializeDefaultPlugins()) {

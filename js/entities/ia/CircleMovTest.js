@@ -3,16 +3,16 @@
  */
 (function(window) {
 
-    function Circle(imgSrc) {
-        this.initialize(imgSrc);
+    function CircleMovTest() {
+        this.initialize();
         this.currentAnimation = "s_down";
     }
 
-    var p = Circle.prototype = new createjs.Shape();
+    var p = CircleMovTest.prototype = new createjs.Shape();
 
     p.bounds;
     p.hit;
-    p.randomDirection;
+    p.direction;
     p.randomSpeedForWalk;
     p.randomTimeForWalk;
     p.countTimeForWalk = 0;
@@ -30,9 +30,9 @@
 
     p.active;
 
-    p.initialize = function(imgSrc) {
+    p.initialize = function() {
 
-        this.name = "Person";
+        this.name = "CircleMovTest";
 
         this.active = true;
 
@@ -41,6 +41,8 @@
         this.setRandomSpeed(3, 1);
         this.setRandomDirection();
         this.setRandomTime(50);
+
+        this.changeDirection(Directions.UP);
 
     };
 
@@ -52,6 +54,12 @@
         //furthest visual element
         this.bounds = 10;
         this.hit = this.bounds;
+        // Checa o borwser.
+        //if (createjs.Sound.BrowserDetect.isIOS || createjs.Sound.BrowserDetect.isAndroid) {  // || createjs.Sound.BrowserDetect.isBlackberry  OJR blackberry has not been tested yet
+        //document.getElementById("mobile").style.display = "block";
+        //document.getElementById("content").style.display = "none";
+        //return;
+        //}
         this.radius = 40;
     };
 
@@ -60,7 +68,7 @@
     };
 
     p.setRandomDirection = function() {
-        this.randomDirection = parseInt(Math.random() * 10);
+        this.direction = NumberUtils.getRandomInt(0, 7)
     };
 
     p.setRandomTime = function(averageTime) {
@@ -69,35 +77,28 @@
 
     p.tick = function(event) {
         if (this.active) {
-            if (this.randomTimeForWalk <= this.countTimeForWalk) {
-                this.setRandomDirection();
-                this.setRandomSpeed(3, 1);
-                this.setRandomTime(50);
-                this.countTimeForWalk = 0;
-            }
 
-            if (this.randomDirection <= 1) {
+            if (this.direction === Directions.RIGHT) {
                 //Incrementa X : Está indo para a ESQUERDA
                 this.x += this.randomSpeedForWalk;
                 this.newDirection = "right";
 
-            } else if (this.randomDirection <= 3) {
-                //Incrementa Y : Está indo para CIMA
+            } else if (this.direction === Directions.DOWN) {
+                //Incrementa Y : Está indo para BAIXO
                 this.y += this.randomSpeedForWalk;
                 this.newDirection = "down";
 
-            } else if (this.randomDirection <= 5) {
-                //Decrementa X : Está indo para DIREITA
+            } else if (this.direction === Directions.LEFT) {
+                //Decrementa X : Está indo para ESQUERDA
                 this.x -= this.randomSpeedForWalk;
                 this.newDirection = "left";
 
-            } else if (this.randomDirection <= 7) {
-                //Decrementa Y : Está indo para BAIXO
+            } else if (this.direction === Directions.UP) {
+                //Decrementa Y : Está indo para CIMA
                 this.y -= this.randomSpeedForWalk;
                 this.newDirection = "up";
 
             } else {
-
                 if (this.lastDirection === "right") {
                     this.newDirection = "s_right";
                 } else if (this.lastDirection === "left") {
@@ -107,14 +108,11 @@
                 } else if (this.lastDirection === "down") {
                     this.newDirection = "s_down";
                 }
-
             }
 
             if (this.lastDirection !== this.newDirection) {
                 this.lastDirection = this.newDirection;
             }
-
-            this.countTimeForWalk++;
         }
     };
 
@@ -133,58 +131,13 @@
 
 
     p.notifyMapLimit = function(dir) {
-        console.log("WARNIG: object (name:" + this.name + ") get Map limit");
-        switch (dir) {
-            case Directions.UP:
-                {
-                    this.changeDirection(Directions.DOWN);
-                }
-
-            case Directions.RIGHT:
-                {
-                    this.changeDirection(Directions.LEFT);
-                }
-
-            case Directions.DOWN:
-                {
-                    this.changeDirection(Directions.UP);
-                }
-
-            case Directions.LEFT:
-                {
-                    this.changeDirection(Directions.RIGHT);
-                }
-
-        }
+        console.log("WARNING: object (name:" + this.name + ") get Map limit");
+        this.changeDirection(Directions.getInverted(dir));
+        console.log("New direction: " + this.newDirection + "(" + this.direction + ")");
     };
 
     p.changeDirection = function(dir) {
-        switch (dir) {
-            case Directions.UP:
-                {
-                    this.randomDirection = 7;
-                    this.newDirection = "up";
-                }
-
-            case Directions.RIGHT:
-                {
-                    this.randomDirection = 1;
-                    this.newDirection = "right";
-                }
-
-            case Directions.DOWN:
-                {
-                    this.randomDirection = 3;
-                    this.newDirection = "down";
-                }
-
-            case Directions.LEFT:
-                {
-                    this.randomDirection = 5;
-                    this.newDirection = "left";
-                }
-
-        }
+        this.direction = dir;
     };
 
     /**
@@ -192,27 +145,8 @@
      * @returns void
      */
     p.invertDirection = function() {
-
-        if (this.randomDirection <= 1) {
-
-            this.randomDirection = 5;
-            this.newDirection = "left";
-
-        } else if (this.randomDirection <= 3) {
-            this.randomDirection = 7;
-            this.newDirection = "up";
-
-        } else if (this.randomDirection <= 5) {
-
-            this.randomDirection = 1;
-            this.newDirection = "right";
-
-        } else if (this.randomDirection <= 7) {
-
-            this.randomDirection = 3;
-            this.newDirection = "down";
-        }
+        this.direction = Directions.getInverted(this.direction);
     };
 
-    window.Circle = Circle;
+    window.CircleMovTest = CircleMovTest;
 }(window));
