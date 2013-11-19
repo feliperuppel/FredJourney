@@ -52,6 +52,9 @@ function init() {
     Game.stage.addChild(messageField);
 
     Game.canvas.onclick = handleClick;
+    
+    Game.stage.addChild(Game.keyboard);
+    
     Game.stage.update();
 
 }
@@ -169,27 +172,27 @@ function handleKeyDown(e) {
         }
 
         switch (e.keyCode) {
-            case KeyBoard.A:
-            case KeyBoard.LEFT:
+            case KeyBoardKeys.A:
+            case KeyBoardKeys.LEFT:
                 movingLeft = true;
                 return false;
 
-            case KeyBoard.D:
-            case KeyBoard.RIGHT:
+            case KeyBoardKeys.D:
+            case KeyBoardKeys.RIGHT:
                 movingRight = true;
                 return false;
 
-            case KeyBoard.W:
-            case KeyBoard.UP:
+            case KeyBoardKeys.W:
+            case KeyBoardKeys.UP:
                 movingUp = true;
                 return false;
 
-            case KeyBoard.S:
-            case KeyBoard.DOWN:
+            case KeyBoardKeys.S:
+            case KeyBoardKeys.DOWN:
                 movingDown = true;
                 return false;
 
-            case KeyBoard.ENTER:
+            case KeyBoardKeys.ENTER:
                 if (Game.canvas.onclick == handleClick) {
                     handleClick();
                 }
@@ -209,27 +212,27 @@ function handleKeyUp(e) {
 
         switch (e.keyCode) {
 
-            case KeyBoard.A:
-            case KeyBoard.LEFT:
+            case KeyBoardKeys.A:
+            case KeyBoardKeys.LEFT:
                 movingLeft = false;
                 return false;
 
-            case KeyBoard.D:
-            case KeyBoard.RIGHT:
+            case KeyBoardKeys.D:
+            case KeyBoardKeys.RIGHT:
                 movingRight = false;
                 return false;
 
-            case KeyBoard.W:
-            case KeyBoard.UP:
+            case KeyBoardKeys.W:
+            case KeyBoardKeys.UP:
                 movingUp = false;
                 return false;
 
-            case KeyBoard.S:
-            case KeyBoard.DOWN:
+            case KeyBoardKeys.S:
+            case KeyBoardKeys.DOWN:
                 movingDown = false;
                 return false;
 
-            case KeyBoard.ENTER:
+            case KeyBoardKeys.ENTER:
 
                 if (Game.canvas.onclick === handleClick) {
                     handleClick();
@@ -237,7 +240,7 @@ function handleKeyUp(e) {
 
                 return false;
 
-            case KeyBoard.Q:
+            case KeyBoardKeys.Q:
                 if (Game.bird.isFlying &&
                         ((Game.map.velocityX >= 0 && Game.map.velocityX <= Map.MINIMUN_VELOCITY)
                                 || (Game.map.velocityX <= 0 && (Game.map.velocityX * -1) <= Map.MINIMUN_VELOCITY)) &&
@@ -252,7 +255,7 @@ function handleKeyUp(e) {
                     Game.bird.isFlying = true;
                 }
                 return false;
-            case KeyBoard.SPACE:
+            case KeyBoardKeys.SPACE:
                 Game.bird.fire();
                 return false;
         }

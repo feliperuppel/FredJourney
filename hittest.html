@@ -46,20 +46,23 @@
         <script type="text/javascript" src="js/management/util/Directions.js"></script>
         <script type="text/javascript" src="js/management/util/NumberUtils.js"></script>
         <script type="text/javascript" src="js/management/util/KeyBoard.js"></script>
+        <script type="text/javascript" src="js/management/util/keyboard/KeyBoardButton.js"></script>
         <script type="text/javascript" src="js/management/Game.js"></script>
         <script type="text/javascript" src="js/management/test/HitTester.js"></script>
 
         <style type="text/css" media="screen">
             canvas {
                 border: 2px solid #666;
-                box-shadow: 3px 3px 3px #888;
+                box-shadow: 2px 14px 14px #888;
+                margin: 40px;
+            }
+            body{
+                margin: 0px;
+                padding: 0px;
             }
         </style>
     <body onload="init();">
-
-        <header id="header"> Fred Journey </header>
-
-        <div id="content" style="width: 960px; height: 400px; margin: auto">
-            <canvas id="gameCanvas" width="960" height="400">Sorry, your browser do not have support to canvas!</canvas>
+        <div id="content" style="width: 960px; height: 600px; margin: auto">
+            <canvas id="gameCanvas" width="960" height="600">Sorry, your browser do not have support to canvas!</canvas>
         </div>
     </body>

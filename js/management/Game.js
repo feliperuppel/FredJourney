@@ -24,6 +24,12 @@ Game.stage = null;
  */
 Game.phaseManager = null;
 
+/**
+ * 
+ * @type KeyBoard
+ */
+Game.keyboard = null;
+
 Game.setup = function() {
 
     Game.canvas = document.getElementById("gameCanvas");
@@ -48,6 +54,10 @@ Game.setup = function() {
 
     // Cria o gerenciador de fases
     Game.phaseManager = new PhaseManager();
+    
+    // Cria o teclado
+    Game.keyboard = new KeyBoard();
+    
 };
 
 Game.onStageSelected = function(a, b) {
