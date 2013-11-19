@@ -5,7 +5,7 @@
         this.currentAnimation = "down";
     }
 
-    var p = Bird.prototype = new createjs.BitmapAnimation();
+    var p = Bird.prototype = new createjs.Sprite();
 
     Bird.UP = 0;
     Bird.UP_RIGHT = 1;

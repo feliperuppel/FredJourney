@@ -18,6 +18,11 @@ Game.canvas = null;
  */
 Game.stage = null;
 
+/**
+ * @type createjs.Stage
+ */
+Game.container = null;
+
 
 /**
  * @type PhaseManager
@@ -54,14 +59,28 @@ Game.setup = function() {
 
     // Cria o gerenciador de fases
     Game.phaseManager = new PhaseManager();
-    
+
     // Cria o teclado
     Game.keyboard = new KeyBoard();
-    
+
+    // Cria o container global
+    Game.container = new createjs.Container();
+
+    Game.stage.addChild(Game.container);
+    Game.stage.addChild(Game.keyboard);
 };
 
 Game.onStageSelected = function(a, b) {
 
+};
+
+
+Game.update = function() {
+    Game.stage.update();
+};
+
+Game.enableMouseOver = function(a){
+    Game.stage.enableMouseOver(a);
 };
 
 Game.showMenu = function() {
@@ -71,6 +90,6 @@ Game.showMenu = function() {
 
 };
 
-Game.ignoreBomb = function(a){
-    
+Game.ignoreBomb = function(a) {
+
 };

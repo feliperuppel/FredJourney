@@ -5,7 +5,7 @@
         this.currentAnimation = "s_down";
     }
 
-    var p = Person.prototype = new createjs.BitmapAnimation();
+    var p = Person.prototype = new createjs.Sprite();
 
     // public properties:
     p.shipFlame;

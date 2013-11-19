@@ -17,41 +17,36 @@
     p.initialize = function() {
         this.Container_Initializer();
         this.width = Game.map.width;
-        this.height = Game.map.height;
-        this.y = 0;
+        this.height = 200;
+        this.y = 500;
         this.x = 0;
         this.makeButtons();
     };
 
     p.makeButtons = function() {
+        
+        this.upButton = new KeyBoardButton("assets/shared/keyboard/button_dir_up.png");
+        this.downButton = new KeyBoardButton('assets/shared/keyboard/button_dir_down.png');
+        this.leftButton = new KeyBoardButton('assets/shared/keyboard/button_dir_left.png');
+        this.rightButton = new KeyBoardButton('assets/shared/keyboard/button_dir_right.png');
 
-        var imgDown = new Image();
-        imgDown.src = "assets/shared/keyboard/button_dir_down.png";
+//        
+        this.downButton.x = 150;
+        this.downButton.y = 150;
+        this.upButton.y = 50 
+        this.upButton.x = this.downButton.x;
+        
+        this.leftButton.y = 100;
+        this.leftButton.x = 100;
+        
+        this.rightButton.y = this.leftButton.y;
+        this.rightButton.x = 200;
+        
 
-        this.downButton = new KeyBoardButton("assets/person-1.png");
-        //shared/keyboard/button_dir_down.png
-//        var upButton = new createjs.BitmapAnimation(localSpriteSheet);
-//        var leftButton = new createjs.BitmapAnimation(imgLeft);
-//        var rightButton = new createjs.BitmapAnimation(imgRight);
-//        
-        this.downButton.x = 300;
-        this.downButton.y = 300;
-//        upButton.y = 100;
-//        upButton.x = 150;
-//        upButton.width = 30;
-//        upButton.height = 26;
-//        
-//        leftButton.y = 150;
-//        leftButton.x = 100;
-//        leftButton.width = 26;
-//        leftButton.height = 30;
-//        
-//        rightButton.y = 150;
-//        rightButton.x = 200;
-//        rightButton.width = 26;
-//        rightButton.height = 30;
-
-        Game.stage.addChild(this.downButton);
+        this.addChild(this.downButton);
+        this.addChild(this.upButton);
+        this.addChild(this.rightButton);
+        this.addChild(this.leftButton);
 //        this.addChild(upButton);
 //        this.addChild(leftButton);
 //        this.addChild(rightButton);

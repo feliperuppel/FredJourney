@@ -43,25 +43,23 @@ function init() {
     messageField.x = Game.canvas.width / 2;
     messageField.y = Game.canvas.height / 2;
     //watch for clicks
-    Game.stage.addChild(messageField);
+    Game.container.addChild(messageField);
 
     Game.canvas.onclick = handleClick;
-    Game.stage.update();
+    Game.update();
 
 }
 
 function handleClick(event) {
     // Prevent extra clicks and hide text
     Game.canvas.onclick = null;
-    Game.stage.removeChild(messageField);
+    Game.container.removeChild(messageField);
 
     // Hide anything on stage and show the score
-    Game.stage.removeAllChildren();
+    Game.container.removeAllChildren();
 
-    Game.stage.enableMouseOver(10);
+    Game.enableMouseOver(10);
     
-    Game.stage.addChild(Game.keyboard);
-
     Game.phaseManager.load(new PhaseTest(), new PhaseObjective());
 
     //start game timer   

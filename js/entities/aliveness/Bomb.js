@@ -4,7 +4,7 @@
         this.initialize();
     }
 
-    var p = Bomb.prototype = new createjs.BitmapAnimation();
+    var p = Bomb.prototype = new createjs.Sprite();
 
     // constructor:
     p.Container_initialize = p.initialize; //unique to avoid overiding base class

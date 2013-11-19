@@ -7,7 +7,7 @@
     var p = KeyBoardButton.prototype = new createjs.Bitmap();
 
     // constructor:
-    p.Container_initialize = p.initialize; //unique to avoid overiding base class
+    p.BitmapInitializer = p.initialize; //unique to avoid overiding base class
 
     p.imgSrc;
 
@@ -18,7 +18,7 @@
 
         this.name = "KeyBoardButton [" + imgSrc + "]";
         
-        this.Container_initialize(imgSrc);
+        this.BitmapInitializer(imgSrc);
     };
 
     window.KeyBoardButton = KeyBoardButton;

@@ -46,7 +46,7 @@ function PhaseManager() {
         curObjective = objective;
         manifest = phase.assets();
 
-        Game.stage.clear();
+        Game.container.clear();
 
         messageField = new createjs.Text("Loading 0/" + manifest.length, "bold 24px Arial", "#000");
 
@@ -60,15 +60,15 @@ function PhaseManager() {
         loader.onComplete = handleComplete;
         loader.loadManifest(manifest);
 
-        Game.stage.addChild(messageField);
-        Game.stage.update();
+        Game.container.addChild(messageField);
+        Game.update();
 
     };
 
     function handleFileLoad(event) {
         assets.push(event.item);
         messageField.text = "Loading " + assets.length + "/" + manifest.length;
-        Game.stage.update();
+        Game.update();
     }
 
     function handleComplete() {
@@ -90,15 +90,15 @@ function PhaseManager() {
 
         Game.canvas.onclick = handleClick;
         messageField.text = "> Play";
-        Game.stage.update();
+        Game.update();
     }
 
     function handleClick() {
 
         Game.canvas.onclick = null;
 
-        Game.stage.removeAllChildren();
-        Game.stage.clear();
+        Game.container.removeAllChildren();
+        Game.container.clear();
 
         velocityField = new createjs.Text("X:0 Y:0", "bold 14px Arial", "#000");
         velocityField.textAlign = "right";
@@ -107,15 +107,15 @@ function PhaseManager() {
 
         Game.map.addChild(inferior, ObjectMode.IGNORE, 0);
 
-        Game.stage.addChild(Game.map);
+        Game.container.addChild(Game.map);
 
         Game.playing = true;
         Game.bird.x = Game.canvas.width / 2;
         Game.bird.y = Game.canvas.height / 2;
 
-        Game.stage.addChild(Game.bird);
+        Game.container.addChild(Game.bird);
 
-        Game.stage.addChild(velocityField);
+        Game.container.addChild(velocityField);
 
         Game.map.addChild(superior, ObjectMode.IGNORE, Game.map.getChilds().lenght);
 
