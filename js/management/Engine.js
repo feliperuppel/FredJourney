@@ -72,7 +72,7 @@ function handleClick(event) {
 function tick() {
     checkBirdMovements();
     Game.phaseManager.tick();
-    Game.stage.update();
+    Game.update();
 }
 
 function checkBirdMovements() {

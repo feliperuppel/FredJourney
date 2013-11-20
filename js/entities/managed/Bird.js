@@ -51,14 +51,14 @@
             images: [img], //image to use
             frames: {width: this.width, height: this.height, regX: 30, regY: 30},
             animations: {
-                down: [0, 3, "down", 4],
-                down_l: [4, 7, "down_l", 4],
-                down_r: [8, 11, "down_r", 4],
-                up: [12, 15, "up", 4],
-                up_l: [4, 7, "up_l", 4],
-                up_r: [8, 11, "up_r", 4],
-                left: [4, 7, "left", 4],
-                right: [8, 11, "right", 4]
+                down: [0, 3, "down"],
+                down_l: [4, 7, "down_l"],
+                down_r: [8, 11, "down_r"],
+                up: [12, 15, "up"],
+                up_l: [4, 7, "up_l"],
+                up_r: [8, 11, "up_r"],
+                left: [4, 7, "left"],
+                right: [8, 11, "right"]
             }
         });
 

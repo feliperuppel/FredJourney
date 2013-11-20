@@ -49,23 +49,23 @@ function init() {
     messageField.x = Game.canvas.width / 2;
     messageField.y = Game.canvas.height / 2;
     //watch for clicks
-    Game.stage.addChild(messageField);
+    Game.container.addChild(messageField);
 
     Game.canvas.onclick = handleClick;
     
-    Game.stage.addChild(Game.keyboard);
+    Game.container.addChild(Game.keyboard);
     
-    Game.stage.update();
+    Game.update();
 
 }
 
 function handleClick(event) {
     // Prevent extra clicks and hide text
     Game.canvas.onclick = null;
-    Game.stage.removeChild(messageField);
+    Game.container.removeChild(messageField);
 
     // Hide anything on stage and show the score
-    Game.stage.removeAllChildren();
+    Game.container.removeAllChildren();
 
     //create the player
     // Criar Map
@@ -86,7 +86,7 @@ function handleClick(event) {
 function tick() {
     checkBirdMovements();
     Game.phaseManager.tick();
-    Game.stage.update();
+    Game.update();
 }
 function checkBirdMovements() {
 

@@ -46,7 +46,7 @@ function PhaseManager() {
         curObjective = objective;
         manifest = phase.assets();
 
-        Game.container.clear();
+        Game.container.removeAllChildren();
 
         messageField = new createjs.Text("Loading 0/" + manifest.length, "bold 24px Arial", "#000");
 
@@ -98,7 +98,6 @@ function PhaseManager() {
         Game.canvas.onclick = null;
 
         Game.container.removeAllChildren();
-        Game.container.clear();
 
         velocityField = new createjs.Text("X:0 Y:0", "bold 14px Arial", "#000");
         velocityField.textAlign = "right";

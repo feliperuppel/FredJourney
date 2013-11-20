@@ -45,14 +45,14 @@
             images: [img], //image to use
             frames: {width: this.width, height: this.height, regX: 47, regY: 62},
             animations: {
-                down: [0, 1, "down", 4],
-                up: [9, 10, "up", 4],
-                left: [3, 4, "left", 4],
-                right: [6, 7, "right", 4],
-                s_down: [2, 2, "s_down", 4],
-                s_up: [11, 11, "s_up", 4],
-                s_left: [5, 5, "s_left", 4],
-                s_right: [8, 8, "s_right", 4],
+                down: [0, 1, "down"],
+                up: [9, 10, "up"],
+                left: [3, 4, "left"],
+                right: [6, 7, "right"],
+                s_down: [2, 2, "s_down"],
+                s_up: [11, 11, "s_up"],
+                s_left: [5, 5, "s_left"],
+                s_right: [8, 8, "s_right"],
             }
         });
 

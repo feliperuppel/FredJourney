@@ -68,6 +68,11 @@ Game.setup = function() {
 
     Game.stage.addChild(Game.container);
     Game.stage.addChild(Game.keyboard);
+    
+    Game.stage.enableMouseOver(10);
+    Game.stage.mouseMoveOutside = true;
+    
+    createjs.Touch.enable(Game.stage);
 };
 
 Game.onStageSelected = function(a, b) {
