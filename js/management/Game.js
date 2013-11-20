@@ -60,14 +60,22 @@ Game.setup = function() {
     // Cria o gerenciador de fases
     Game.phaseManager = new PhaseManager();
 
-    // Cria o teclado
-    Game.keyboard = new KeyBoard();
-
     // Cria o container global
     Game.container = new createjs.Container();
 
+
     Game.stage.addChild(Game.container);
-    Game.stage.addChild(Game.keyboard);
+    
+    // Vamos exibir o teclado?
+    if(Game.config.SHOW_KEYBOARD){
+        
+        // Cria o teclado
+        Game.keyboard = new KeyBoard();
+        
+        // Adiciona o teclado ao palco
+        Game.stage.addChild(Game.keyboard);
+        
+    }
     
     Game.stage.enableMouseOver(10);
     Game.stage.mouseMoveOutside = true;
