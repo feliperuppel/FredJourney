@@ -63,7 +63,7 @@ Game.setup = function() {
     // Cria o container global
     Game.container = new createjs.Container();
 
-
+    // Adiciona o container para o palco
     Game.stage.addChild(Game.container);
     
     // Vamos exibir o teclado?
@@ -80,7 +80,13 @@ Game.setup = function() {
     Game.stage.enableMouseOver(10);
     Game.stage.mouseMoveOutside = true;
     
+    // set FPS
+    createjs.Ticker.useRAF = true;
+    createjs.Ticker.setFPS(Game.config.FPS);
+    
+    // Habilita o suport ao touch
     createjs.Touch.enable(Game.stage);
+    
 };
 
 Game.onStageSelected = function(a, b) {

@@ -20,8 +20,6 @@ if (!console || !console.log) {
 
 function init() {
     // Configure frame rate
-//    createjs.Ticker.useRAF = true;
-//    createjs.Ticker.setFPS(60);
     try {
         // Checa se há plugin de som disponível
         if (!createjs.Sound.initializeDefaultPlugins()) {
