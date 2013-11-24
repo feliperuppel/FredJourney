@@ -221,7 +221,7 @@ function handleKeyUp(e) {
 
             case KeyBoardKeys.ENTER:
 
-                if (canvas.onclick === handleClick) {
+                if (Game.canvas.onclick === handleClick) {
                     handleClick();
                 }
 

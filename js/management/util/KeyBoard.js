@@ -74,19 +74,19 @@
         
         this.rightButton.addEventListener("pressup", function(e){
            movingRight = false; 
-           console.log("Moving right");
+           console.log("Stopping right");
         });
         this.leftButton.addEventListener("pressup", function(e){
            movingLeft = false; 
-           console.log("Moving left");
+           console.log("Stopping left");
         });
         this.upButton.addEventListener("pressup", function(e){
            movingUp = false; 
-           console.log("Moving up");
+           console.log("Stopping up");
         });
         this.downButton.addEventListener("pressup", function(e){
            movingDown = false; 
-           console.log("Moving down");
+           console.log("Stopping down");
         });
         
     };
