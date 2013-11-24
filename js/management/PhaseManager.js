@@ -116,11 +116,12 @@ function PhaseManager() {
 
         Game.container.addChild(velocityField);
 
-        Game.map.addChild(superior, ObjectMode.IGNORE, Game.map.getChilds().lenght);
+        Game.map.addChild(superior, ObjectMode.IGNORE, 99999);
 
         curPhase.setObjective(curObjective);
         curPhase.start();
-        Game.stage.update();
+        
+        Game.update();
     }
 
     this.tick = function() {
@@ -136,5 +137,5 @@ function PhaseManager() {
 
     this.closePhase = function() {
         Game.playing = false;
-    }
+    };
 }
