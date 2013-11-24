@@ -4,8 +4,7 @@
     function PhaseTest() {
 
     }
-
-
+    
     var p = PhaseTest.prototype = new Phase();
     /* @var p Phase */
 
@@ -73,10 +72,7 @@
         Game.map.addChild(b4, ObjectMode.BLOCK);
     };
 
-    this.name = "__Phase";
-
     p.tick = function(evt) {
-
     };
 
     this.name = "Fase de Teste";

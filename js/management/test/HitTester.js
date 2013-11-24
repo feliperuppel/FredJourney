@@ -19,9 +19,7 @@ if (!console || !console.log) {
 }
 
 function init() {
-    // Configure frame rate
-//    createjs.Ticker.useRAF = true;
-//    createjs.Ticker.setFPS(60);
+    
     Game.setup();
     
     try {
@@ -35,13 +33,6 @@ function init() {
         console.log(e);
     }
 
-    // Checa o borwser.
-    //if (createjs.Sound.BrowserDetect.isIOS || createjs.Sound.BrowserDetect.isAndroid) {  // || createjs.Sound.BrowserDetect.isBlackberry  OJR blackberry has not been tested yet
-    //document.getElementById("mobile").style.display = "block";
-    //document.getElementById("content").style.display = "none";
-    //return;
-    //}
-
     messageField = new createjs.Text("Welcome: Click to play");
 
     messageField.maxWidth = 1000;
@@ -52,8 +43,6 @@ function init() {
     Game.container.addChild(messageField);
 
     Game.canvas.onclick = handleClick;
-    
-    Game.container.addChild(Game.keyboard);
     
     Game.update();
 
@@ -68,12 +57,6 @@ function handleClick(event) {
     Game.container.removeAllChildren();
 
     //create the player
-    // Criar Map
-    Game.map = new Map();
-
-    // Cria o gerenciador de fases
-    Game.phaseManager = new PhaseManager(Game.map);
-
     Game.phaseManager.load(new PhaseTest(), new PhaseObjective());
 
     //start game timer   
