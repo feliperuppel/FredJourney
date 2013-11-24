@@ -8,13 +8,6 @@ CollisionUtil.checkRadiusCollision = function(a, b) {
 
         var hited = CollisionUtil.checkCircleCollision(a, b);
 
-        if (hited) {
-
-            console.log("A.y: " + a.centerY + ", A.x: " + a.centerX + ", name: " + a.name + ", radius:" + a.radius);
-            console.log("B.y: " + b.centerY + ", B.x: " + b.centerX + ", name: " + b.name + ", radius:" + b.radius);
-            console.log("Hit!-------------------------------------------------------");
-        }
-
         return hited;
     }
     return false;

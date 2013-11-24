@@ -110,30 +110,7 @@
         this.x = pos.x;
         this.y = pos.y;
 
-//        console.log("Fire x:" + this.x + "\ty:" + this.y);
-//        console.log("Map x:" + Game.map.x + "\ty:" + Game.map.y);
         switch (Game.bird.currentDirection) {
-//            case Bird.RIGHT:
-//                this.gotoAndPlay("right");
-//                return false;
-//            case Bird.UP_RIGHT :
-//                this.gotoAndPlay("up_r");
-//                return false;
-//            case Bird.DOWN_RIGHT :
-//                this.gotoAndPlay("down_r");
-//                return false;
-//            case Bird.UP_LEFT :
-//                this.gotoAndPlay("up_r_h");
-//                return false;
-//            case Bird.DOWN_LEFT :
-//                this.gotoAndPlay("down_r_h");
-//                return false;
-//            case Bird.LEFT :
-//                this.gotoAndPlay("right_v");
-//                return false;
-//            case Bird.LEFT :
-//                this.gotoAndPlay("right_v");
-//                return false;
 
             default :
                 this.gotoAndPlay("right");

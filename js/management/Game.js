@@ -84,7 +84,7 @@ Game.setup = function() {
     createjs.Ticker.useRAF = true;
     createjs.Ticker.setFPS(Game.config.FPS);
     
-    // Habilita o suport ao touch
+    // Habilita o suporte ao touch
     createjs.Touch.enable(Game.stage);
     
 };
